@@ -1,9 +1,4 @@
+int main(void) {
 
-
-
-
-
-
-int main(){
-    
+    return 1+2;
 }
