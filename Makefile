@@ -1,26 +1,28 @@
-GRM=calc.y
-LEX=calc.l
-BIN=calc
+CC = gcc
+YACC = yacc -d
+LEX = flex
+EXEC = compil.exe
 
-CC=gcc
-CFLAGS=-Wall -g
+all: $(EXEC)
 
-OBJ=y.tab.o lex.yy.o main.o
+$(EXEC): y.tab.c lex.yy.c
+	$(CC) $^ -o $@
 
-all: $(BIN)
+lex.yy.c: compil.l
+	$(LEX) $<
 
-%.o: %.c
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
+y.tab.c y.tab.h: compil.y
+	$(YACC) $<
 
-y.tab.c: $(GRM)
-	yacc -d $<
+run: $(EXEC)
+	./$(EXEC) < test.c
 
-lex.yy.c: $(LEX)
-	flex $<
-
-$(BIN): $(OBJ)
-	$(CC) $(CFLAGS) $(CPPFLAGS) $^ -o $@
+debug:
+	$(YACC) -t -g compil.y
+	$(LEX) compil.l
+	$(CC) y.tab.c lex.yy.c -o $(EXEC) -DDEBUG
+	dot -Tpdf y.gv > y.pdf
+	@echo "Debug files generated: y.output, y.gv"
 
 clean:
-	rm $(OBJ) y.tab.c y.tab.h lex.yy.c
-
+	rm -f y.tab.c y.tab.h lex.yy.c $(EXEC) y.output y.gv y.pdf

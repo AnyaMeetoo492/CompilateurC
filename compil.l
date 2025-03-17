@@ -5,6 +5,10 @@
 %}
 
 %%
+main { printf("tMAIN, %s, %d\n", yytext, yyleng); return tMAIN;}
+int { printf("tINT\n"); return tINT;}
+void { printf("tVOID, %s, %d\n", yytext, yyleng); return tVOID;}
+return { printf("tRETURN\n"); return tRETURN;}
 
 [ \t]+	{};
 [0-9]+	{
@@ -12,44 +16,40 @@
 	  printf("tNB, %s, %d\n", yytext, yyleng);
 	  return tNB;
 	}
-"="	{ printf("tEGAL, %s, %d\n", yytext, yyleng); }
-"-"	{ printf("tSOU\n"); }
+"="	{ printf("tEGAL, %s, %d\n", yytext, yyleng); return tEGAL;}
+"-"	{ printf("tSOU\n"); return tSOU;}
 "+"	{ printf("tADD\n"); return tADD;}
-"*"	{ printf("tMUL\n"); }
-"/"	{ printf("tDIV\n"); }
-"("	{ printf("tPO\n"); }
-")"	{ printf("tPF\n"); }
-"{" { printf("tAO\n"); }
-"}" { printf("tAF\n"); }
-"." { printf("tPOINT\n");}
-"["	{ printf("tCO\n"); }
-"]"	{ printf("tCF\n"); }
-"<"	{ printf("tINF\n"); }
-">"	{ printf("tSUP\n"); }
-"\\" { printf("tBACKSLASH\n"); }
-"^"	{ printf("tCHAPEAU\n"); }
-"?"	{ printf("tINTERROG\n"); }
-"!" { printf("tEXCLAM\n"); }
-"|" { printf("tVERTICAL\n"); }
-"$" { printf("tDOLLAR\n"); }
-"%" { printf("tPERCENT\n"); }
-";" { printf("tPTVIRGULE\n"); }
-[a-z]	{
+"*"	{ printf("tMUL\n"); return tMUL;}
+"/"	{ printf("tDIV\n"); return tDIV;}
+"("	{ printf("tPO\n"); return tPO;}
+")"	{ printf("tPF\n"); return tPF;}
+"{" { printf("tAO\n"); return tAO;}
+"}" { printf("tAF\n"); return tAF;}
+"." { printf("tPOINT\n"); return tPOINT;}
+"["	{ printf("tCO\n"); return tCO;}
+"]"	{ printf("tCF\n"); return tCF;}
+"<"	{ printf("tINF\n"); return tINF;}
+">"	{ printf("tSUP\n"); return tSUP;}
+"\\" { printf("tBACKSLASH\n"); return tBACKSLASH;}
+"^"	{ printf("tCHAPEAU\n"); return tCHAPEAU;}
+"?"	{ printf("tINTERROG\n"); return tINTERROG;}
+"!" { printf("tEXCLAM\n"); return tEXCALM;}
+"|" { printf("tVERTICAL\n"); return tVERTICAL;}
+"$" { printf("tDOLLAR\n"); return tDOLLAR;}
+"%" { printf("tPERCENT\n"); return tPERCENT;}
+";" { printf("tPTVIRGULE\n"); return tPTVIRGULE;}
+"," { printf("tVIRGULE\n"); return tVIRGULE;}
+"" { printf("tVIDE\n"); return tVIDE;}
+[a-z]+	{
 	  //yylval.var = yytext[0];
 	  printf("tID\n");
+	  return tID;
 	}
 \n	{ printf("tFL\n"); }
-.	{ printf("tERROR\n"); }
-main { printf("tMAIN, %s, %d\n", yytext, yyleng);}
-int { printf("tINT\n");}
-void { printf("tVOID, %s, %d\n", yytext, yyleng);}
+.	{ printf("tERROR\n"); return tERROR;}
+
 %%
 int yywrap()
 {
-return 1 ;
-}
-int main ()
-{
-yylex() ;
 return 1 ;
 }
