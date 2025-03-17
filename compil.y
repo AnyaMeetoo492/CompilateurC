@@ -8,6 +8,7 @@ void yyerror(char *s);
 %union { int nb; char var; }
 %token tVIDE tEGAL tMOINSMOINS tPO tPF tSOU tADD tDIV tMUL tERROR tAO tAF tPOINT tCO tCF tINF tSUP tBACKSLASH tCHAPEAU tINTERROG tEXCALM tDOLLAR tPERCENT tPTVIRGULE tVIRGULE tPLUSPLUS
 %token tOR tAND tTILD tANDLOG tORLOG tDD tDG
+%token tIF tELSE tWHILE tFOR
 %token <nb> tNB
 %token <var> tID
 %token tMAIN tRETURN 
@@ -50,7 +51,6 @@ Arithmetic : ValueArithmetic | Bitwise | tPO Arithmetic tPF
 Add : ValueArithmetic tPLUSPLUS 
 Sou : ValueArithmetic tMOINSMOINS
 
-
 Bitwise : BitwiseAnd | BitwiseOr
 BitwiseAnd : Arithmetic tAND Arithmetic
 BitwiseOr : Arithmetic tOR Arithmetic
@@ -59,7 +59,6 @@ ValueLogic : tTRUE | tFALSE | NameVariable
 Logic : AndLogic | OrLogic | ValueLogic | tPO Logic tPF
 AndLogic : Logic tANDLOG Logic
 OrLogic : Logic tORLOG Logic 
-
 
 // yacc -d compil.y && flex compil.l && gcc y.tab.c lex.yy.c -o compil.exe && ./compil.exe < test.c 
 

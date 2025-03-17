@@ -8,6 +8,12 @@
 main { printf("tMAIN, %s, %d\n", yytext, yyleng); return tMAIN;}
 return { printf("tRETURN\n"); return tRETURN;}
 
+if { printf("tIF\n"); return tIF;}
+else { printf("tELSE\n"); return tELSE;}
+
+while { printf("tWHILE\n"); return tWHILE;}
+for { printf("tFOR\n"); return tFOR;}
+
 void { printf("tVOID, %s, %d\n", yytext, yyleng); return tVOID;}
 int { printf("tINT\n"); return tINT;}
 bool { printf("tBOOL\n"); return tBOOL; }
@@ -67,9 +73,6 @@ false { printf("tFALSE\n"); return tFALSE; }
 
 "&&" { printf("tANDLOG\n"); return tANDLOG;}
 "||" { printf("tORLOG\n"); return tORLOG;}
-
-
-
 
 
 \n	{ printf("tFL\n"); }
