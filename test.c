@@ -3,6 +3,8 @@ int main(int a) {
     return a+1;
     a++;
 
+    a = (b);
+
     return 0+1;
 
 }

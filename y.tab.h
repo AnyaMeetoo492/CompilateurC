@@ -39,7 +39,7 @@
 # define YY_YY_Y_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 1
+# define YYDEBUG 0
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -56,35 +56,47 @@ extern int yydebug;
     YYUNDEF = 257,                 /* "invalid token"  */
     tVIDE = 258,                   /* tVIDE  */
     tEGAL = 259,                   /* tEGAL  */
-    tPO = 260,                     /* tPO  */
-    tPF = 261,                     /* tPF  */
-    tSOU = 262,                    /* tSOU  */
-    tADD = 263,                    /* tADD  */
-    tDIV = 264,                    /* tDIV  */
-    tMUL = 265,                    /* tMUL  */
-    tERROR = 266,                  /* tERROR  */
-    tAO = 267,                     /* tAO  */
-    tAF = 268,                     /* tAF  */
-    tPOINT = 269,                  /* tPOINT  */
-    tCO = 270,                     /* tCO  */
-    tCF = 271,                     /* tCF  */
-    tINF = 272,                    /* tINF  */
-    tSUP = 273,                    /* tSUP  */
-    tBACKSLASH = 274,              /* tBACKSLASH  */
-    tCHAPEAU = 275,                /* tCHAPEAU  */
-    tINTERROG = 276,               /* tINTERROG  */
-    tEXCALM = 277,                 /* tEXCALM  */
-    tVERTICAL = 278,               /* tVERTICAL  */
+    tMOINSMOINS = 260,             /* tMOINSMOINS  */
+    tPO = 261,                     /* tPO  */
+    tPF = 262,                     /* tPF  */
+    tSOU = 263,                    /* tSOU  */
+    tADD = 264,                    /* tADD  */
+    tDIV = 265,                    /* tDIV  */
+    tMUL = 266,                    /* tMUL  */
+    tERROR = 267,                  /* tERROR  */
+    tAO = 268,                     /* tAO  */
+    tAF = 269,                     /* tAF  */
+    tPOINT = 270,                  /* tPOINT  */
+    tCO = 271,                     /* tCO  */
+    tCF = 272,                     /* tCF  */
+    tINF = 273,                    /* tINF  */
+    tSUP = 274,                    /* tSUP  */
+    tBACKSLASH = 275,              /* tBACKSLASH  */
+    tCHAPEAU = 276,                /* tCHAPEAU  */
+    tINTERROG = 277,               /* tINTERROG  */
+    tEXCALM = 278,                 /* tEXCALM  */
     tDOLLAR = 279,                 /* tDOLLAR  */
     tPERCENT = 280,                /* tPERCENT  */
     tPTVIRGULE = 281,              /* tPTVIRGULE  */
     tVIRGULE = 282,                /* tVIRGULE  */
-    tNB = 283,                     /* tNB  */
-    tID = 284,                     /* tID  */
-    tMAIN = 285,                   /* tMAIN  */
-    tINT = 286,                    /* tINT  */
-    tVOID = 287,                   /* tVOID  */
-    tRETURN = 288                  /* tRETURN  */
+    tPLUSPLUS = 283,               /* tPLUSPLUS  */
+    tOR = 284,                     /* tOR  */
+    tAND = 285,                    /* tAND  */
+    tTILD = 286,                   /* tTILD  */
+    tANDLOG = 287,                 /* tANDLOG  */
+    tORLOG = 288,                  /* tORLOG  */
+    tDD = 289,                     /* tDD  */
+    tDG = 290,                     /* tDG  */
+    tNB = 291,                     /* tNB  */
+    tID = 292,                     /* tID  */
+    tMAIN = 293,                   /* tMAIN  */
+    tRETURN = 294,                 /* tRETURN  */
+    tVOID = 295,                   /* tVOID  */
+    tINT = 296,                    /* tINT  */
+    tBOOL = 297,                   /* tBOOL  */
+    tCHAR = 298,                   /* tCHAR  */
+    tTRUE = 299,                   /* tTRUE  */
+    tFALSE = 300                   /* tFALSE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -95,35 +107,47 @@ extern int yydebug;
 #define YYUNDEF 257
 #define tVIDE 258
 #define tEGAL 259
-#define tPO 260
-#define tPF 261
-#define tSOU 262
-#define tADD 263
-#define tDIV 264
-#define tMUL 265
-#define tERROR 266
-#define tAO 267
-#define tAF 268
-#define tPOINT 269
-#define tCO 270
-#define tCF 271
-#define tINF 272
-#define tSUP 273
-#define tBACKSLASH 274
-#define tCHAPEAU 275
-#define tINTERROG 276
-#define tEXCALM 277
-#define tVERTICAL 278
+#define tMOINSMOINS 260
+#define tPO 261
+#define tPF 262
+#define tSOU 263
+#define tADD 264
+#define tDIV 265
+#define tMUL 266
+#define tERROR 267
+#define tAO 268
+#define tAF 269
+#define tPOINT 270
+#define tCO 271
+#define tCF 272
+#define tINF 273
+#define tSUP 274
+#define tBACKSLASH 275
+#define tCHAPEAU 276
+#define tINTERROG 277
+#define tEXCALM 278
 #define tDOLLAR 279
 #define tPERCENT 280
 #define tPTVIRGULE 281
 #define tVIRGULE 282
-#define tNB 283
-#define tID 284
-#define tMAIN 285
-#define tINT 286
-#define tVOID 287
-#define tRETURN 288
+#define tPLUSPLUS 283
+#define tOR 284
+#define tAND 285
+#define tTILD 286
+#define tANDLOG 287
+#define tORLOG 288
+#define tDD 289
+#define tDG 290
+#define tNB 291
+#define tID 292
+#define tMAIN 293
+#define tRETURN 294
+#define tVOID 295
+#define tINT 296
+#define tBOOL 297
+#define tCHAR 298
+#define tTRUE 299
+#define tFALSE 300
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -132,7 +156,7 @@ union YYSTYPE
 #line 8 "compil.y"
  int nb; char var; 
 
-#line 136 "y.tab.h"
+#line 160 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
