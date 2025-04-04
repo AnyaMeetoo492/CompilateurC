@@ -1,7 +1,7 @@
 %{
 #include <stdlib.h>
 #include <stdio.h>
-  int yylex ();
+int yylex ();
 int var[26];
 void yyerror(char *s);
 %}
@@ -18,16 +18,17 @@ void yyerror(char *s);
 %left tADD tSOU tMOINSMOINS tPLUSPLUS 
 %left tMUL tDIV tPERCENT
 %%
-Programme : FonctionMain;
+Programme : FonctionMain | Fonction | Fonction FonctionMain;
 
-FonctionMain : TypeMain tMAIN ArgFormat Body
+FonctionMain : TypeMain tMAIN ArgFormat Body {printf("[MAIN]\n");}
+Fonction : TypeVariable tID  ArgFormat Body
 
 TypeMain : tINT | tVOID 
 
 ArgFormat : tPO tPF |tPO ArgList tPF
 ArgList : TypeVariable NameVariable | TypeVariable NameVariable tVIRGULE ArgList
 TypeVariable : tINT | tVOID | tBOOL | tCHAR
-NameVariable : tID
+NameVariable : tID {printf("[Name] %c \n", $1);}
 
 Body: tAO tAF | tAO Instructions tAF
 Instructions : Instruction | Instruction Instructions
@@ -40,7 +41,7 @@ Retour : tRETURN Arithmetic
 Initialisation : TypeVariable NameVariable | TypeVariable Affectation
 Affectation : NameVariable tEGAL Value
 
-ValueArithmetic : NameVariable | tNB
+ValueArithmetic : NameVariable | tNB 
 Arithmetic : ValueArithmetic | Bitwise | tPO Arithmetic tPF 
             | Arithmetic tADD Arithmetic 
             | Arithmetic tSOU Arithmetic 

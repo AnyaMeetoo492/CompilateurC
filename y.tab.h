@@ -87,16 +87,20 @@ extern int yydebug;
     tORLOG = 288,                  /* tORLOG  */
     tDD = 289,                     /* tDD  */
     tDG = 290,                     /* tDG  */
-    tNB = 291,                     /* tNB  */
-    tID = 292,                     /* tID  */
-    tMAIN = 293,                   /* tMAIN  */
-    tRETURN = 294,                 /* tRETURN  */
-    tVOID = 295,                   /* tVOID  */
-    tINT = 296,                    /* tINT  */
-    tBOOL = 297,                   /* tBOOL  */
-    tCHAR = 298,                   /* tCHAR  */
-    tTRUE = 299,                   /* tTRUE  */
-    tFALSE = 300                   /* tFALSE  */
+    tIF = 291,                     /* tIF  */
+    tELSE = 292,                   /* tELSE  */
+    tWHILE = 293,                  /* tWHILE  */
+    tFOR = 294,                    /* tFOR  */
+    tNB = 295,                     /* tNB  */
+    tID = 296,                     /* tID  */
+    tMAIN = 297,                   /* tMAIN  */
+    tRETURN = 298,                 /* tRETURN  */
+    tVOID = 299,                   /* tVOID  */
+    tINT = 300,                    /* tINT  */
+    tBOOL = 301,                   /* tBOOL  */
+    tCHAR = 302,                   /* tCHAR  */
+    tTRUE = 303,                   /* tTRUE  */
+    tFALSE = 304                   /* tFALSE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -138,16 +142,20 @@ extern int yydebug;
 #define tORLOG 288
 #define tDD 289
 #define tDG 290
-#define tNB 291
-#define tID 292
-#define tMAIN 293
-#define tRETURN 294
-#define tVOID 295
-#define tINT 296
-#define tBOOL 297
-#define tCHAR 298
-#define tTRUE 299
-#define tFALSE 300
+#define tIF 291
+#define tELSE 292
+#define tWHILE 293
+#define tFOR 294
+#define tNB 295
+#define tID 296
+#define tMAIN 297
+#define tRETURN 298
+#define tVOID 299
+#define tINT 300
+#define tBOOL 301
+#define tCHAR 302
+#define tTRUE 303
+#define tFALSE 304
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -156,7 +164,7 @@ union YYSTYPE
 #line 8 "compil.y"
  int nb; char var; 
 
-#line 160 "y.tab.h"
+#line 168 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

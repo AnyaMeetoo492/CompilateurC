@@ -18,9 +18,9 @@ run: $(EXEC)
 	./$(EXEC) < test.c
 
 debug:
-	$(YACC) -t -g -Wconflicts-sr compil.y 
+	$(YACC) -t -g -Wconflicts-sr -Wcounterexamples -Wall compil.y 
 	$(LEX) compil.l
-	$(CC) y.tab.c lex.yy.c -o $(EXEC) -DDEBUG 
+	$(CC) y.tab.c lex.yy.c -o $(EXEC) -DDEBUG -Wall
 	dot -Tpdf y.gv > y.pdf
 	@echo "Debug files generated: y.output, y.gv"
 
