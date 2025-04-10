@@ -108,6 +108,7 @@ void print_table(){
     printf("|                    SYMBOL TABLE, TABLE SIZE = %ld                    |\n", ARRAYSIZE(table_symbol));
     printf("=======================================================================\n");
     printf("| index |    type     | scope | datatype | initialised | name | values |\n");
+    printf("-----------------------------------------------------------------------\n");
 
     for (int i = 0; i < ARRAYSIZE(table_symbol); i++) {
         symbol * s = get_symbol(i);
@@ -152,6 +153,9 @@ void main(){
         INT
     };
 
+    add_symbol(&sym);
+
+    
     symbol sym2 = {
         "b",
         VARIABLE, 
@@ -160,6 +164,10 @@ void main(){
         25,
         INT
     };
+
+    add_symbol(&sym2);
+    
+    /*
 
     symbol sym3 = {
         "c",
@@ -181,8 +189,8 @@ void main(){
 
     add_symbol(&sym);
     remove_symbol(&sym);
-    add_symbol(&sym);
+    add_symbol(&sym);*/
 
     print_table();
 
-}
+} 

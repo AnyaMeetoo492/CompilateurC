@@ -1,75 +1,182 @@
-%{
-#include <stdlib.h>
-#include <stdio.h>
-int yylex ();
-int var[26];
-void yyerror(char *s);
-%}
-%union { int nb; char var; }
-%token tVIDE tEGAL tMOINSMOINS tPO tPF tSOU tADD tDIV tMUL tERROR tAO tAF tPOINT tCO tCF tINF tSUP tBACKSLASH tCHAPEAU tINTERROG tEXCALM tDOLLAR tPERCENT tPTVIRGULE tVIRGULE tPLUSPLUS
-%token tOR tAND tTILD tANDLOG tORLOG tDD tDG
-%token tIF tELSE tWHILE tFOR
-%token <nb> tNB
-%token <var> tID
-%token tMAIN tRETURN 
-%token tVOID tINT tBOOL tCHAR tTRUE tFALSE
-%start Programme
-%left tAND tOR tANDLOG tORLOG
-%left tADD tSOU tMOINSMOINS tPLUSPLUS 
-%left tMUL tDIV tPERCENT
-%%
-Programme : FonctionMain | Fonction | Fonction FonctionMain;
+  %{
+  #include <stdlib.h>
+  #include <stdio.h>
+  #include <string.h>
+  #include "table_symbole.h"
 
-FonctionMain : TypeMain tMAIN ArgFormat Body {printf("[MAIN]\n");}
-Fonction : TypeVariable tID  ArgFormat Body
+  int yylex ();
+  void yyerror(char *s);
+  %}
 
-TypeMain : tINT | tVOID 
+  //---------------------- TYPES ----------------------
+  %union {
+    int nb;              // for numbers and expressions returning int
+    char *var;           // for variable names and type keywords
+    struct {
+      char* name;
+      int value;
+    } affect;            // for Affectation results
+  }
 
-ArgFormat : tPO tPF |tPO ArgList tPF
-ArgList : TypeVariable NameVariable | TypeVariable NameVariable tVIRGULE ArgList
-TypeVariable : tINT | tVOID | tBOOL | tCHAR
-NameVariable : tID {printf("[Name] %c \n", $1);}
+  // Tokens with values
+  %token <nb> tNB
+  %token <var> tID
 
-Body: tAO tAF | tAO Instructions tAF
-Instructions : Instruction | Instruction Instructions
-Instruction: Expression tPTVIRGULE
-Expression : Initialisation | Affectation | Retour | Add | Sou
+  // Non-terminals with specific types
+  %type <var> TypeMain TypeVariable NameVariable
+  %type <nb> ValueArithmetic Arithmetic Value Bitwise BitwiseAnd BitwiseOr
+  %type <nb> ValueLogic Logic AndLogic OrLogic
+  %type <affect> Affectation
 
-Value : Arithmetic | Logic
 
-Retour : tRETURN Arithmetic
-Initialisation : TypeVariable NameVariable | TypeVariable Affectation
-Affectation : NameVariable tEGAL Value
+  //---------------------- TOKENS ----------------------
+  %token tVIDE tERROR
 
-ValueArithmetic : NameVariable | tNB 
-Arithmetic : ValueArithmetic | Bitwise | tPO Arithmetic tPF 
-            | Arithmetic tADD Arithmetic 
-            | Arithmetic tSOU Arithmetic 
-            | Arithmetic tMUL Arithmetic 
-            | Arithmetic tDIV Arithmetic
-            | Arithmetic tPERCENT Arithmetic
+  %token tEGAL tADD tSOU tMUL tDIV tPERCENT
+  %token tAND tOR tTILD tANDLOG tORLOG tDD tDG
+  %token tMOINSMOINS tPLUSPLUS
 
-Add : ValueArithmetic tPLUSPLUS 
-Sou : ValueArithmetic tMOINSMOINS
+  %token tPO tPF tAO tAF tCO tCF
+  %token tPOINT tVIRGULE tPTVIRGULE
+  %token tINF tSUP tBACKSLASH tCHAPEAU tINTERROG tEXCALM tDOLLAR
 
-Bitwise : BitwiseAnd | BitwiseOr
-BitwiseAnd : Arithmetic tAND Arithmetic
-BitwiseOr : Arithmetic tOR Arithmetic
+  %token tIF tELSEIF tELSE tWHILE tFOR
 
-ValueLogic : tTRUE | tFALSE | NameVariable
-Logic : AndLogic | OrLogic | ValueLogic | tPO Logic tPF
-AndLogic : Logic tANDLOG Logic
-OrLogic : Logic tORLOG Logic 
+  %token tMAIN tRETURN
+  %token tVOID tINT tBOOL tCHAR tTRUE tFALSE
 
-// yacc -d compil.y && flex compil.l && gcc y.tab.c lex.yy.c -o compil.exe && ./compil.exe < test.c 
+  //---------------------- START ----------------------
+  %start Programme
 
-%%
-void yyerror(char *s) 
-{ 
-  fprintf(stderr, "%s\n", s); 
-}
-int main(void) {
-  printf("Compilo\n"); // yydebug=1;
-  yyparse();
-  return 0;
-} 
+  //---------------------- PRECEDENCE ----------------------
+  %left tAND tOR tANDLOG tORLOG
+  %left tADD tSOU tMOINSMOINS tPLUSPLUS 
+  %left tMUL tDIV tPERCENT
+
+  %%
+
+  //---------------------- TYPES ----------------------
+
+  TypeMain : tINT { $$ = "int"; }
+          | tVOID { $$ = "void"; }
+  TypeVariable : tINT { $$ = "int"; }
+              | tVOID { $$ = "void"; }
+              | tBOOL { $$ = "bool"; }
+              | tCHAR { $$ = "char"; }
+
+  NameVariable : tID { $$ = $1; }
+  Value : Arithmetic | Logic
+  ValueArithmetic : NameVariable { $$ = 0; } | tNB { $$ = $1; }
+
+  //---------------------- ARITHMETIC ----------------------
+
+  Arithmetic : ValueArithmetic
+            | Bitwise 
+            | tPO Arithmetic tPF { $$ = $2; }
+            | Arithmetic tADD Arithmetic { $$ = $1 + $3; }
+            | Arithmetic tSOU Arithmetic { $$ = $1 - $3; }
+            | Arithmetic tMUL Arithmetic { $$ = $1 * $3; }
+            | Arithmetic tDIV Arithmetic { $$ = $1 / $3; }
+            | Arithmetic tPERCENT Arithmetic { $$ = $1 % $3; }
+
+  Add : ValueArithmetic tPLUSPLUS
+  Sou : ValueArithmetic tMOINSMOINS
+
+  //---------------------- BITWISE ----------------------
+
+  Bitwise : BitwiseAnd | BitwiseOr
+  BitwiseAnd : Arithmetic tAND Arithmetic { $$ = $1 & $3; }
+  BitwiseOr : Arithmetic tOR Arithmetic { $$ = $1 | $3; }
+
+  //---------------------- LOGIC ----------------------
+
+  ValueLogic : tTRUE { $$ = 1; } | tFALSE { $$ = 0; } | NameVariable { $$ = 0; }
+  Logic : AndLogic | OrLogic | ValueLogic | tPO Logic tPF { $$ = $2; }
+  AndLogic : Logic tANDLOG Logic { $$ = $1 && $3; }
+  OrLogic : Logic tORLOG Logic { $$ = $1 || $3; }
+
+  //---------------------- CONTROL STRUCTURES ----------------------
+
+  Control : If | While | For
+  If : tIF tPO Logic tPF tAO Instructions tAF 
+    | tIF tPO Logic tPF tAO Instructions tAF tELSE tAO Instructions tAF
+    | tIF tPO Logic tPF tAO Instructions tAF tELSEIF tPO Logic tPF tAO Instructions tAF
+  While : tWHILE tPO Logic tPF tAO Instructions tAF
+  For : tFOR tPO Logic tPF tAO Instructions tAF
+
+  //---------------------- PROGRAMME ----------------------
+
+  Programme : FonctionMain
+            | Fonction
+            | Fonction FonctionMain
+
+  //---------------------- FUNCTIONS ----------------------
+
+  FonctionMain : TypeMain tMAIN ArgFormat Body
+  Fonction : TypeVariable tID ArgFormat Body
+
+  ArgFormat : tPO tPF 
+            | tPO ArgList tPF
+  ArgList : TypeVariable NameVariable 
+          | TypeVariable NameVariable tVIRGULE ArgList
+
+  Retour : tRETURN Arithmetic
+
+  //---------------------- BODY ----------------------
+
+  Body: tAO tAF | tAO Instructions tAF
+  Instructions : Instruction | Instruction Instructions
+  Instruction: Expression tPTVIRGULE
+
+  //---------------------- EXPRESSIONS ----------------------
+
+  Expression : Initialisation 
+            | Affectation 
+            | Retour 
+            | Add 
+            | Sou
+            | Control
+
+  Initialisation : 
+    TypeVariable NameVariable {
+      symbol * s = malloc(sizeof(symbol));
+      s->name = $2;
+      s->type = VARIABLE;
+      s->scope = LOCAL;
+      s->initialised = 0;
+      s->value = 0;
+      if (strcmp($1, "int") == 0) s->dtype = INT;
+      add_symbol(s);
+    }
+
+  | TypeVariable Affectation {
+      symbol* s = malloc(sizeof(symbol));
+      s->name = $2.name;
+      s->type = VARIABLE;
+      s->scope = LOCAL;
+      s->initialised = 1;
+      s->value = $2.value;
+
+      if (strcmp($1, "int") == 0) s->dtype = INT;
+      add_symbol(s);
+    }
+
+  Affectation : NameVariable tEGAL Value {
+    $$.name = $1;
+    $$.value = $3;
+  }
+
+  %%
+
+  //---------------------- ERROR ----------------------
+
+  void yyerror(char *s) { 
+    fprintf(stderr, "Error: %s\n", s); 
+  }
+
+  int main(void) {
+    printf("Compilo\n");
+    yyparse();
+
+    return 0;
+  }
