@@ -101,8 +101,14 @@ void modify_symbol(symbol* sym, symbol* new_sym) {
         table_symbol[i] = new_sym;
     }
 }
-
-
+int get_index_by_name(const char* name) {
+    for (int i = 0; i < ARRAYSIZE(table_symbol); i++) {
+        if (table_symbol[i] && strcmp(table_symbol[i]->name, name) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
 void print_table(){
     printf("=======================================================================\n");
     printf("|                    SYMBOL TABLE, TABLE SIZE = %ld                    |\n", ARRAYSIZE(table_symbol));
@@ -140,49 +146,3 @@ void print_table(){
     printf("=======================================================================\n");
 
 } 
-
-void main(){
-
-    symbol sym = {
-        "a",
-        VARIABLE, 
-        LOCAL,
-        1,
-        25,
-        INT
-    };
-
-    symbol sym2 = {
-        "b",
-        VARIABLE, 
-        LOCAL,
-        1,
-        25,
-        INT
-    };
-
-    symbol sym3 = {
-        "c",
-        VARIABLE, 
-        LOCAL,
-        1,
-        25,
-        INT
-    };
-
-    add_tmp(&sym3);
-
-    remove_tmp();
-
-    add_tmp(&sym3);
-    add_tmp(&sym2);
-
-    remove_tmp();
-
-    add_symbol(&sym);
-    remove_symbol(&sym);
-    add_symbol(&sym);
-
-    print_table();
-
-}

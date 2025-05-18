@@ -72,3 +72,5 @@ void remove_tmp();
 void modify_symbol(symbol* sym, symbol* new_sym);
 
 void print_table();
+
+int get_index_by_name(const char* name);

@@ -27,8 +27,8 @@ false { return tFALSE; }
 	yylval.nb = atoi(yytext);
 	return tNB;}
 
-[a-z]+	{
-	yylval.var = yytext[0];
+[a-zA-Z_][a-zA-Z0-9_]*	{
+	yylval.str = strdup(yytext);
 	return tID;}
 
 "="	{ return tEGAL;}
@@ -36,8 +36,6 @@ false { return tFALSE; }
 "+"	{ return tADD;}
 "*"	{ return tMUL;}
 "/"	{ return tDIV;}
-"++" { return tPLUSPLUS;}
-"--" { return tMOINSMOINS;}
 
 "("	{ return tPO;}
 ")"	{ return tPF;}

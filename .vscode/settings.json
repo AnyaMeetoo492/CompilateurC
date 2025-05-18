@@ -9,6 +9,9 @@
         "type_traits": "c",
         "utility": "c",
         "typeindex": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "table_symbole.h": "c",
+        "stdio.h": "c",
+        "stdlib.h": "c"
     }
 }
