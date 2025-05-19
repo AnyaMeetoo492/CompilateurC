@@ -19,7 +19,7 @@
 
 #define DATATYPE2STR(t, s) do { \
         if (t == INT) s = "INT"; \
-        else if (t == FLOAT) s = "FLOAT"; \
+        else if (t == BOOL) s = "BOOL"; \
         else s = "UNKNOWN"; \
     } while (0)
 
@@ -43,7 +43,7 @@ enum scopetype {
 
 enum datatype {
     INT,
-    FLOAT
+    BOOL,
 };
 
 typedef struct {
@@ -74,3 +74,5 @@ void modify_symbol(symbol* sym, symbol* new_sym);
 void print_table();
 
 int get_index_by_name(const char* name);
+
+void free_table();

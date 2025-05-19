@@ -41,6 +41,15 @@ int compare_symbol(const symbol* sym1, const symbol* sym2) {
     return 1;
 }
 
+int exists_symbol(const symbol* sym) {
+    for (int i = 0; i < ARRAYSIZE(table_symbol); i++) {
+        if (compare_symbol(table_symbol[i], sym)) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 int get_index(const symbol* sym) {
     for (int i = 0; i < ARRAYSIZE(table_symbol); i++) {
         
@@ -62,11 +71,16 @@ symbol * get_symbol(int index) {
 // Ajouter un symbole
 void add_symbol(symbol* sym) {
     int i = get_index(NULL); // trouve un espace vide
-
-    if (i >= 0 && i < ARRAYSIZE(table_symbol)) {
-        table_symbol[i] = sym;
+    if (exists_symbol(sym) == 0) {
+        if (i >= 0 && i < ARRAYSIZE(table_symbol)) {
+            table_symbol[i] = sym;
+        }
     }
-    
+    else {
+        // Modifier le symbole
+        int index = get_index(sym);
+        
+    }
 }
 
 // Ajouter un symbole temporaire
@@ -146,3 +160,12 @@ void print_table(){
     printf("=======================================================================\n");
 
 } 
+void free_table() {
+    for (int i = 0; i < ARRAYSIZE(table_symbol); i++) {
+        if (table_symbol[i] != NULL) {
+            free(table_symbol[i]->name);
+            free(table_symbol[i]);
+            table_symbol[i] = NULL;
+        }
+    }
+}
