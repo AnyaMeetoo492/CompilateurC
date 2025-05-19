@@ -10,6 +10,7 @@ return { return tRETURN;}
 
 if { return tIF;}
 else { return tELSE;}
+"else if" { return tELSEIF;}
 
 while { return tWHILE;}
 for { return tFOR;}

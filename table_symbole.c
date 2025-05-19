@@ -169,7 +169,7 @@ void main(){
         25,
         INT
     };
-
+    //symbol sym ={$1,VARIABLE}
     add_tmp(&sym3);
 
     remove_tmp();
