@@ -84,19 +84,33 @@ Affectation : NameVariable tEGAL Expression {
         
         sym->initialised = 1;
         sym->value = $3;
-        f_write("LOAD", idx, 0, 1, 10);
-        printf("[Affectation] %s = %d\n", $1, $3);
+        f_write("LOAD", 0, idx, 0, $3);
+        printf("[Affectation Expression] %s = %d\n", $1, $3);
     } else {
         printf("[ERROR] Variable %s pas déclarée\n", $1);
         exit(1);
     }
-};
+}; | NameVariable tEGAL Value {
+    int idx = get_index_by_name($1);
+    if (idx >= 0) {
+        printf("[Affectation Value] %s = %d\n", $1, $3);
+        symbol* sym = get_symbol(idx);
+        
+        sym->initialised = 1;
+        sym->value = $3;
+        f_write("LOAD", 0, idx, 1, $3);
+    } else {
+        printf("[ERROR] Variable %s pas déclarée\n", $1);
+        exit(1);
+    }
+}
 Initialisation : TypeVariable NameVariable{
     int idx = get_index_by_name($2);
     if (idx >= 0) {
         printf("[ERROR] Variable %s déjà déclarée\n", $2);
         exit(1);
     } else {
+        printf("[Initialisation] %s\n", $2);
         symbol* sym = malloc(sizeof(symbol));
         sym->name = strdup($2);
         sym->type = VARIABLE;
@@ -105,7 +119,6 @@ Initialisation : TypeVariable NameVariable{
         sym->value = 0;
         sym->dtype = current_type;
         add_symbol(sym);
-        printf("[Initialisation] %s\n", $2);
     }
 };
 InitAffect : TypeVariable NameVariable tEGAL Expression {
@@ -119,12 +132,30 @@ InitAffect : TypeVariable NameVariable tEGAL Expression {
         sym->value = $4;
         sym->dtype = current_type;
         add_symbol(sym);
-        printf("[Initialisation] %s\n", $2);
+
+        idx=get_index(sym);
+        printf("[InitAfect] %s\n", $2);
+        f_write("LOAD", 0, idx, 0, $2);
     }
-};
+}; | TypeVariable NameVariable tEGAL Value {
+    int idx = get_index_by_name($2);
+    if (idx < 0) {
+        symbol* sym = malloc(sizeof(symbol));
+        sym->name = strdup($2);
+        sym->type = VARIABLE;
+        sym->scope = LOCAL;
+        sym->initialised = 1;
+        sym->value = $4;
+        sym->dtype = current_type;
+        add_symbol(sym);
+        idx=get_index(sym);
+        printf("[InitAfect] %s\n", $2);
+        f_write("LOAD", 0, idx, 0, $2);
+    }
+}
 Expression
     : Expression tADD Expression {
-        $$ = $1 + $3;//FAUXXXXXXXXXXX
+        
         symbol* sym = malloc(sizeof(symbol));
         sym->type = VARIABLE;
         sym->scope = LOCAL;

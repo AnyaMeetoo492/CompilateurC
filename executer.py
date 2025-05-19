@@ -12,7 +12,7 @@ def execute_instruction(mem, instr):
         return
     op = instr[0].upper()
 
-    if op == "LOAD" and len(instr) == 3:
+    if op == "AFC" and len(instr) == 3:
         addr, val = int(instr[1]), int(instr[2])
         mem[addr] = val
 
