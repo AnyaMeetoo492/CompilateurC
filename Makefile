@@ -16,6 +16,7 @@ y.tab.c y.tab.h: compil.y
 
 run: $(EXEC)
 	./$(EXEC) < test.c
+	python3 executer.py
 
 debug:
 	$(YACC) -t -g -Wconflicts-sr -Wcounterexamples -Wall compil.y 

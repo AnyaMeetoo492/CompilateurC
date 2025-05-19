@@ -16,6 +16,10 @@ def execute_instruction(mem, instr):
         addr, val = int(instr[1]), int(instr[2])
         mem[addr] = val
 
+    elif op == "COP" and len(instr) == 3:
+        dest, src = int(instr[1]), int(instr[2])
+        mem[dest] = mem[src]
+
     elif op == "ADD" and len(instr) == 4:
         dest, src1, src2 = map(int, instr[1:])
         mem[dest] = mem[src1] + mem[src2]

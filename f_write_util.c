@@ -7,7 +7,7 @@
 // type = 0 : adresse mémoire
 // type = 1 : valeur immédiate
 
-void f_write(const char *op, int type1, int operand1, int type2, int operand2) {
+void f_write(const char *op, int dest, int type1, int op1, int type2, int op2) {
     FILE *f = fopen(FILE_NAME, "a");
     if (!f) {
         perror("Erreur lors de l'ouverture du fichier");
@@ -15,48 +15,49 @@ void f_write(const char *op, int type1, int operand1, int type2, int operand2) {
     }
 
     char line[100];
-    char comment[100] = "; ";
+    char comment[200] = "; ";
 
-    // Instruction à 1 opérande (ex: LOAD)
-    if (strcmp(op, "LOAD") == 0) {
-        snprintf(line, sizeof(line), "LOAD %d %d", operand1, operand2);
-        if (type2 == 1) {
-            snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment),
-                     "mémoire[%d] = %d", operand1, operand2);
-        } else {
-            snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment),
-                     "mémoire[%d] = mémoire[%d]", operand1, operand2);
-        }
-    }
-    // Instructions à 3 opérandes (ex: ADD, SUB, etc.)
-    else if (strcmp(op, "ADD") == 0 || strcmp(op, "SUB") == 0 ||
-             strcmp(op, "MUL") == 0 || strcmp(op, "DIV") == 0) {
-        snprintf(line, sizeof(line), "%s %d %d %d", op, operand1, operand2, type2 == 1 ? operand2 : operand2);
-        snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment),
-                 "mémoire[%d] = ", operand1);
-        if (type1 == 1)
-            snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment),
-                     "%d", operand2);
-        else
-            snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment),
-                     "mémoire[%d]", operand2);
-
-        snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment),
-                 " %s ", op);
-
+    // Instruction AFC : mémoire[dest] = valeur ou mémoire[op2]
+    if (strcmp(op, "AFC") == 0) {
+        snprintf(line, sizeof(line), "AFC %d %d", dest, op2);
         if (type2 == 1)
             snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment),
-                     "%d", operand2);
+                     "mémoire[%d] = %d", dest, op2);
         else
             snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment),
-                     "mémoire[%d]", operand2);
+                     "mémoire[%d] = mémoire[%d]", dest, op2);
     }
-    // Instruction sans opérande (ex: PRINT)
+    // Instruction COP : mémoire[dest] = mémoire[op1]
+    else if (strcmp(op, "COP") == 0) {
+        snprintf(line, sizeof(line), "COP %d %d", dest, op2);
+        snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment),
+                 "mémoire[%d] = mémoire[%d]", dest, op2);
+    }
+    // Instructions à 3 opérandes : ADD, SUB, MUL, DIV
+    else if (strcmp(op, "ADD") == 0 || strcmp(op, "SUB") == 0 ||
+             strcmp(op, "MUL") == 0 || strcmp(op, "DIV") == 0) {
+        snprintf(line, sizeof(line), "%s %d %d %d", op, dest, op1, op2);
+        snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment),
+                 "mémoire[%d] = ", dest);
+
+        if (type1 == 1)
+            snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment), "%d", op1);
+        else
+            snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment), "mémoire[%d]", op1);
+
+        snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment), " %s ", op);
+
+        if (type2 == 1)
+            snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment), "%d", op2);
+        else
+            snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment), "mémoire[%d]", op2);
+    }
+    // Instruction PRINT
     else if (strcmp(op, "PRINT") == 0) {
         snprintf(line, sizeof(line), "PRINT");
-        snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment),
-                 "affiche la mémoire");
-    } else {
+        snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment), "affiche la mémoire");
+    }
+    else {
         fprintf(stderr, "[ERROR] Opération non supportée : %s\n", op);
         fclose(f);
         return;

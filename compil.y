@@ -84,7 +84,7 @@ Affectation : NameVariable tEGAL Expression {
         
         sym->initialised = 1;
         sym->value = $3;
-        f_write("LOAD", 0, idx, 0, $3);
+        f_write("COP", idx, 0, 0, 0, $3);//PAS SURRRRRRRRRRR
         printf("[Affectation Expression] %s = %d\n", $1, $3);
     } else {
         printf("[ERROR] Variable %s pas déclarée\n", $1);
@@ -98,7 +98,7 @@ Affectation : NameVariable tEGAL Expression {
         
         sym->initialised = 1;
         sym->value = $3;
-        f_write("LOAD", 0, idx, 1, $3);
+        f_write("AFC", idx, 0, 0, 1, $3);
     } else {
         printf("[ERROR] Variable %s pas déclarée\n", $1);
         exit(1);
@@ -135,7 +135,7 @@ InitAffect : TypeVariable NameVariable tEGAL Expression {
 
         idx=get_index(sym);
         printf("[InitAfect] %s\n", $2);
-        f_write("LOAD", 0, idx, 0, $2);
+        f_write("AFC", idx, 0, 0, 0, $4);
     }
 }; | TypeVariable NameVariable tEGAL Value {
     int idx = get_index_by_name($2);
@@ -150,20 +150,22 @@ InitAffect : TypeVariable NameVariable tEGAL Expression {
         add_symbol(sym);
         idx=get_index(sym);
         printf("[InitAfect] %s\n", $2);
-        f_write("LOAD", 0, idx, 0, $2);
+        f_write("AFC", idx, 0, 0, 1, $4);
     }
 }
 Expression
     : Expression tADD Expression {
-        
+        printf("[ADD]\n");
         symbol* sym = malloc(sizeof(symbol));
         sym->type = VARIABLE;
         sym->scope = LOCAL;
         sym->initialised = 1;
-        sym->value = $$;
+        sym->value = -1;
         sym->dtype = current_type;
-        printf("[ADD] %d\n", $$);
         add_tmp(sym);
+        int idx=get_index(sym);
+        $$=idx;
+        f_write("ADD",idx, 0, $1, 0, $3);
     }
     | Expression tSOU Expression
     | Expression tMUL Expression
@@ -172,10 +174,10 @@ Expression
     | Expression tANDLOG Expression
     | Expression tORLOG Expression {}
     | tPO Expression tPF {
-        $$ = $2;
+        
     }
     | Value {
-        $$= $1;
+        
     }
     ;
 
@@ -188,7 +190,7 @@ Value
                 printf("[ERROR] Variable %s non initialisée\n", $1);
                 exit(1);
             }
-            $$ = sym->value;
+            $$ = idx;
         } else {
             printf("[ERROR] Variable %s non déclarée\n", $1);
             exit(1);

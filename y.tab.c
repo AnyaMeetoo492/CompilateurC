@@ -711,8 +711,8 @@ static const yytype_uint8 yyrline[] =
        0,    35,    35,    35,    35,    37,    38,    40,    40,    42,
       42,    43,    43,    46,    47,    48,    49,    51,    57,    58,
       62,    63,    67,    68,    69,    70,    71,    75,    78,    93,
-     107,   124,   140,   157,   168,   169,   170,   171,   172,   173,
-     174,   177,   183,   197,   201,   204
+     107,   124,   140,   157,   170,   171,   172,   173,   174,   175,
+     176,   179,   185,   199,   203,   206
 };
 #endif
 
@@ -1381,7 +1381,7 @@ yyreduce:
         
         sym->initialised = 1;
         sym->value = (yyvsp[0].nb);
-        f_write("LOAD", 0, idx, 0, (yyvsp[0].nb));
+        f_write("COP", idx, 0, 0, 0, (yyvsp[0].nb));//PAS SURRRRRRRRRRR
         printf("[Affectation Expression] %s = %d\n", (yyvsp[-2].str), (yyvsp[0].nb));
     } else {
         printf("[ERROR] Variable %s pas déclarée\n", (yyvsp[-2].str));
@@ -1401,7 +1401,7 @@ yyreduce:
         
         sym->initialised = 1;
         sym->value = (yyvsp[0].nb);
-        f_write("LOAD", 0, idx, 1, (yyvsp[0].nb));
+        f_write("AFC", idx, 0, 0, 1, (yyvsp[0].nb));
     } else {
         printf("[ERROR] Variable %s pas déclarée\n", (yyvsp[-2].str));
         exit(1);
@@ -1448,7 +1448,7 @@ yyreduce:
 
         idx=get_index(sym);
         printf("[InitAfect] %s\n", (yyvsp[-2].str));
-        f_write("LOAD", 0, idx, 0, (yyvsp[-2].str));
+        f_write("AFC", idx, 0, 0, 0, (yyvsp[0].nb));
     }
 }
 #line 1455 "y.tab.c"
@@ -1469,7 +1469,7 @@ yyreduce:
         add_symbol(sym);
         idx=get_index(sym);
         printf("[InitAfect] %s\n", (yyvsp[-2].str));
-        f_write("LOAD", 0, idx, 0, (yyvsp[-2].str));
+        f_write("AFC", idx, 0, 0, 1, (yyvsp[0].nb));
     }
 }
 #line 1476 "y.tab.c"
@@ -1478,43 +1478,45 @@ yyreduce:
   case 33: /* Expression: Expression tADD Expression  */
 #line 157 "compil.y"
                                  {
-        
+        printf("[ADD]\n");
         symbol* sym = malloc(sizeof(symbol));
         sym->type = VARIABLE;
         sym->scope = LOCAL;
         sym->initialised = 1;
-        sym->value = (yyval.nb);
+        sym->value = -1;
         sym->dtype = current_type;
-        printf("[ADD] %d\n", (yyval.nb));
         add_tmp(sym);
+        int idx=get_index(sym);
+        (yyval.nb)=idx;
+        f_write("ADD",idx, 0, (yyvsp[-2].nb), 0, (yyvsp[0].nb));
     }
-#line 1492 "y.tab.c"
+#line 1494 "y.tab.c"
     break;
 
   case 39: /* Expression: Expression tORLOG Expression  */
-#line 173 "compil.y"
+#line 175 "compil.y"
                                    {}
-#line 1498 "y.tab.c"
+#line 1500 "y.tab.c"
     break;
 
   case 40: /* Expression: tPO Expression tPF  */
-#line 174 "compil.y"
+#line 176 "compil.y"
                          {
-        (yyval.nb) = (yyvsp[-1].nb);
+        
     }
-#line 1506 "y.tab.c"
+#line 1508 "y.tab.c"
     break;
 
   case 41: /* Expression: Value  */
-#line 177 "compil.y"
+#line 179 "compil.y"
             {
-        (yyval.nb)= (yyvsp[0].nb);
+        
     }
-#line 1514 "y.tab.c"
+#line 1516 "y.tab.c"
     break;
 
   case 42: /* Value: NameVariable  */
-#line 183 "compil.y"
+#line 185 "compil.y"
                    {
         int idx = get_index_by_name((yyvsp[0].str));
         if (idx >= 0) {
@@ -1523,42 +1525,42 @@ yyreduce:
                 printf("[ERROR] Variable %s non initialisée\n", (yyvsp[0].str));
                 exit(1);
             }
-            (yyval.nb) = sym->value;
+            (yyval.nb) = idx;
         } else {
             printf("[ERROR] Variable %s non déclarée\n", (yyvsp[0].str));
             exit(1);
         }
     }
-#line 1533 "y.tab.c"
+#line 1535 "y.tab.c"
     break;
 
   case 43: /* Value: tNB  */
-#line 197 "compil.y"
+#line 199 "compil.y"
           {
         
         (yyval.nb) = (yyvsp[0].nb);
     }
-#line 1542 "y.tab.c"
+#line 1544 "y.tab.c"
     break;
 
   case 44: /* Value: tTRUE  */
-#line 201 "compil.y"
+#line 203 "compil.y"
             {
         (yyval.nb) = 1;
     }
-#line 1550 "y.tab.c"
+#line 1552 "y.tab.c"
     break;
 
   case 45: /* Value: tFALSE  */
-#line 204 "compil.y"
+#line 206 "compil.y"
              {
         (yyval.nb) = 0;
     }
-#line 1558 "y.tab.c"
+#line 1560 "y.tab.c"
     break;
 
 
-#line 1562 "y.tab.c"
+#line 1564 "y.tab.c"
 
       default: break;
     }
@@ -1751,7 +1753,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 211 "compil.y"
+#line 213 "compil.y"
 
 
 void yyerror(char *s) 

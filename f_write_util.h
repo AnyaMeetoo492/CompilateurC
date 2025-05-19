@@ -1,1 +1,1 @@
-void f_write(const char *op, int type1, int operand1, int type2, int operand2);
+void f_write(const char *op, int dest, int type1, int op1, int type2, int op2);
