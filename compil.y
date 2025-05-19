@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "table_symbole.h"
+#include "f_write_util.h"
 int yylex ();
 int var[26];
 void yyerror(char *s);
@@ -75,7 +76,7 @@ Retour
     ;
 
 Affectation : NameVariable tEGAL Expression {
-    print_table();
+    
     int idx = get_index_by_name($1);
     printf("[Affectation] index de variable %d\n", idx);
     if (idx >= 0) {
@@ -83,9 +84,10 @@ Affectation : NameVariable tEGAL Expression {
         
         sym->initialised = 1;
         sym->value = $3;
+        f_write("LOAD", idx, 0, 1, 10);
         printf("[Affectation] %s = %d\n", $1, $3);
     } else {
-        printf("[ERROR] Variable %s déjà déclarée\n", $1);
+        printf("[ERROR] Variable %s pas déclarée\n", $1);
         exit(1);
     }
 };
@@ -122,7 +124,7 @@ InitAffect : TypeVariable NameVariable tEGAL Expression {
 };
 Expression
     : Expression tADD Expression {
-        $$ = $1 + $3;
+        $$ = $1 + $3;//FAUXXXXXXXXXXX
         symbol* sym = malloc(sizeof(symbol));
         sym->type = VARIABLE;
         sym->scope = LOCAL;
@@ -187,7 +189,10 @@ int main(void) {
   //yydebug = 1;
   printf("Compilo\n");
 
+  FILE *f = fopen("assembly.txt", "w");
+  
   int indx = get_index_by_name("b");
+
   printf("Index de b : %d\n", indx);
   yyparse();
   

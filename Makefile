@@ -5,7 +5,7 @@ EXEC = compil.exe
 
 all: $(EXEC)
 
-$(EXEC): y.tab.c lex.yy.c table_symbole.c
+$(EXEC): y.tab.c lex.yy.c table_symbole.c f_write_util.c
 	$(CC) $^ -o $@
 
 lex.yy.c: compil.l
@@ -20,7 +20,7 @@ run: $(EXEC)
 debug:
 	$(YACC) -t -g -Wconflicts-sr -Wcounterexamples -Wall compil.y 
 	$(LEX) compil.l
-	$(CC) y.tab.c lex.yy.c table_symbole.c -o $(EXEC) -DDEBUG -Wall
+	$(CC) y.tab.c lex.yy.c table_symbole.c f_write_util.c -o $(EXEC) -DDEBUG -Wall
 	dot -Tpdf y.gv > y.pdf
 	@echo "Debug files generated: y.output, y.gv"
 
