@@ -1,2 +1,0 @@
-Apprendre à définir des tokens dans un fichier yacc (.y)
-https://www.geeksforgeeks.org/introduction-to-yacc/

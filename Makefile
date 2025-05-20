@@ -27,4 +27,4 @@ debug:
 	@echo "Debug files generated: y.output, y.gv"
 
 clean:
-	rm -f y.tab.c y.tab.h lex.yy.c $(EXEC) y.output y.gv y.pdf
+	rm -f y.tab.c y.tab.h lex.yy.c $(EXEC) y.output y.gv y.pdf *.txt
