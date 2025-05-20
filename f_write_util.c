@@ -33,7 +33,7 @@ void f_write(const char *op, int dest, int type1, int op1, int type2, int op2) {
         snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment),
                  "mémoire[%d] = mémoire[%d]", dest, op2);
     }
-    // Instructions à 3 opérandes : ADD, SUB, MUL, DIV
+    // Instructions à 3 opérandes : ADD, SUB, MUL, DIV....
     else if (strcmp(op, "ADD") == 0 || strcmp(op, "SUB") == 0 ||
              strcmp(op, "MUL") == 0 || strcmp(op, "DIV") == 0 || 
              strcmp(op, "EQU") == 0 || strcmp(op, "INF") == 0 ||
@@ -60,6 +60,20 @@ void f_write(const char *op, int dest, int type1, int op1, int type2, int op2) {
     else if (strcmp(op, "PRINT") == 0) {
         snprintf(line, sizeof(line), "PRINT");
         snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment), "affiche la mémoire");
+    }
+    else if (strcmp(op, "JMP") == 0) {
+        snprintf(line, sizeof(line), "JMP %d", dest);
+        snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment), "saute à l'instruction %d", dest);
+    }
+    else if (strcmp(op, "JMF") == 0) {
+        snprintf(line, sizeof(line), "JMF %d %d", dest, op1);
+        snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment),
+                 "si mémoire[%d] == 0, saute à l'instruction %d", op1, dest);
+    }
+    else if (strcmp(op, "LABEL") == 0) {
+        snprintf(line, sizeof(line), "LABEL %d", dest);
+        snprintf(comment, sizeof(comment), "LABEL %d", dest);
+
     }
     else {
         fprintf(stderr, "[ERROR] Opération non supportée : %s\n", op);

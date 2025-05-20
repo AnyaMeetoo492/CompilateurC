@@ -8,6 +8,11 @@ int yylex ();
 int var[26];
 void yyerror(char *s);
 int current_type;
+int label_counter = 0;
+int next_label() {
+    return label_counter++;
+}
+
 %}
 %union { 
   int nb; 
@@ -78,6 +83,34 @@ Instruction
 Retour 
     : tRETURN Expression
     ;
+IfStatement
+    : tIF tPO Expression tPF Body {
+        printf("[IF] condition temporaire idx = %d\n", $3);
+        int label_else = next_label();
+        int label_end = next_label();
+
+        f_write("JMF", $3, label_else, 0, 0, 0);
+        // Bloc IF
+        remove_all_tmp(); // Nettoyer avant le bloc
+        // Code du corps généré dans $5
+        f_write("JMP", label_end, 0, 0, 0, 0);
+        f_write("LABEL", label_else, 0, 0, 0, 0);
+        f_write("LABEL", label_end, 0, 0, 0, 0);
+    }
+    | tIF tPO Expression tPF Body tELSE Body {
+        printf("[IF-ELSE] condition temporaire idx = %d\n", $3);
+        int label_else = next_label();
+        int label_end = next_label();
+
+        f_write("JMF", $3, label_else, 0, 0, 0);
+        // Bloc IF
+        remove_all_tmp();
+        f_write("JMP", label_end, 0, 0, 0, 0);
+        f_write("LABEL", label_else, 0, 0, 0, 0);
+        // Bloc ELSE
+        remove_all_tmp();
+        f_write("LABEL", label_end, 0, 0, 0, 0);
+    };
 
 Affectation : NameVariable tEGAL Expression {
     

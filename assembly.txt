@@ -1,3 +1,15 @@
+AFC 254 1            ; mémoire[254] = 1
+COP 0 254            ; mémoire[0] = mémoire[254]
+AFC 254 2            ; mémoire[254] = 2
+EQU 253 0 254        ; mémoire[253] = mémoire[0] EQU mémoire[254]
+AFC 252 1            ; mémoire[252] = 1
+COP 0 252            ; mémoire[0] = mémoire[252]
+AFC 254 4            ; mémoire[254] = 4
+COP 0 254            ; mémoire[0] = mémoire[254]
+JMF 253 0            ; si mémoire[0] == 0, saute à l'instruction 253
+JMP 1                ; saute à l'instruction 1
+LABEL 0              LABEL 0
+LABEL 1              LABEL 1
 AFC 254 3            ; mémoire[254] = 3
 COP 0 254            ; mémoire[0] = mémoire[254]
 AFC 254 5            ; mémoire[254] = 5
@@ -11,30 +23,27 @@ AFC 252 5            ; mémoire[252] = 5
 ADD 251 253 252      ; mémoire[251] = mémoire[253] ADD mémoire[252]
 ADD 250 251 1        ; mémoire[250] = mémoire[251] ADD mémoire[1]
 COP 0 250            ; mémoire[0] = mémoire[250]
-AFC 254 4            ; mémoire[254] = 4
-ADD 253 254 0        ; mémoire[253] = mémoire[254] ADD mémoire[0]
-COP 3 253            ; mémoire[3] = mémoire[253]
 AFC 254 1            ; mémoire[254] = 1
 ADD 253 0 254        ; mémoire[253] = mémoire[0] ADD mémoire[254]
-COP 4 253            ; mémoire[4] = mémoire[253]
+COP 3 253            ; mémoire[3] = mémoire[253]
 AFC 254 1            ; mémoire[254] = 1
 ADD 253 1 254        ; mémoire[253] = mémoire[1] ADD mémoire[254]
 COP 253 253          ; mémoire[253] = mémoire[253]
-COP 5 253            ; mémoire[5] = mémoire[253]
+COP 4 253            ; mémoire[4] = mémoire[253]
 AFC 254 3            ; mémoire[254] = 3
 AFC 253 5            ; mémoire[253] = 5
 MUL 252 254 253      ; mémoire[252] = mémoire[254] MUL mémoire[253]
 SUB 251 252 1        ; mémoire[251] = mémoire[252] SUB mémoire[1]
-COP 6 251            ; mémoire[6] = mémoire[251]
+COP 5 251            ; mémoire[5] = mémoire[251]
 AFC 254 1            ; mémoire[254] = 1
 AFC 253 2            ; mémoire[253] = 2
 EQU 252 254 253      ; mémoire[252] = mémoire[254] EQU mémoire[253]
-COP 7 252            ; mémoire[7] = mémoire[252]
+COP 6 252            ; mémoire[6] = mémoire[252]
 AFC 254 1            ; mémoire[254] = 1
 AFC 253 2            ; mémoire[253] = 2
 NEQ 252 254 253      ; mémoire[252] = mémoire[254] NEQ mémoire[253]
-COP 8 252            ; mémoire[8] = mémoire[252]
+COP 7 252            ; mémoire[7] = mémoire[252]
 AFC 254 1            ; mémoire[254] = 1
 AFC 253 2            ; mémoire[253] = 2
 INF 252 254 253      ; mémoire[252] = mémoire[254] INF mémoire[253]
-COP 9 252            ; mémoire[9] = mémoire[252]
+COP 8 252            ; mémoire[8] = mémoire[252]

@@ -165,7 +165,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 12 "compil.y"
+#line 17 "compil.y"
  
   int nb; 
   char var; 
