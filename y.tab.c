@@ -75,7 +75,6 @@
 #include "table_symbole.h"
 #include "f_write_util.h"
 int yylex ();
-int var[26];
 void yyerror(char *s);
 int current_type;
 int label_counter = 0;
@@ -84,7 +83,7 @@ int next_label() {
 }
 
 
-#line 88 "y.tab.c"
+#line 87 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -239,13 +238,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 17 "compil.y"
+#line 16 "compil.y"
  
   int nb; 
-  char var; 
   char* str;  // nom de variable
 
-#line 249 "y.tab.c"
+#line 247 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -725,11 +723,11 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    43,    43,    43,    43,    45,    46,    48,    48,    50,
-      50,    51,    51,    54,    55,    56,    57,    59,    65,    66,
-      70,    71,    75,    76,    77,    78,    79,    84,    87,   100,
-     115,   133,   151,   171,   186,   201,   216,   231,   246,   261,
-     276,   291,   306,   322,   339,   353
+       0,    41,    41,    41,    41,    43,    44,    46,    46,    48,
+      48,    49,    49,    52,    53,    54,    55,    57,    63,    64,
+      68,    69,    73,    74,    75,    76,    77,    82,    85,    98,
+     113,   131,   149,   169,   184,   199,   214,   229,   244,   259,
+     274,   289,   304,   320,   337,   351
 };
 #endif
 
@@ -1353,52 +1351,52 @@ yyreduce:
   switch (yyn)
     {
   case 5: /* FonctionMain: TypeMain tMAIN ArgFormat Body  */
-#line 45 "compil.y"
+#line 43 "compil.y"
                                              {printf("[MAIN]\n");}
-#line 1359 "y.tab.c"
+#line 1357 "y.tab.c"
     break;
 
   case 13: /* TypeVariable: tINT  */
-#line 54 "compil.y"
+#line 52 "compil.y"
              { current_type = 0; }
-#line 1365 "y.tab.c"
+#line 1363 "y.tab.c"
     break;
 
   case 14: /* TypeVariable: tBOOL  */
-#line 55 "compil.y"
+#line 53 "compil.y"
              { current_type = 1; }
-#line 1371 "y.tab.c"
+#line 1369 "y.tab.c"
     break;
 
   case 15: /* TypeVariable: tVOID  */
-#line 56 "compil.y"
+#line 54 "compil.y"
              { current_type = 2; }
-#line 1377 "y.tab.c"
+#line 1375 "y.tab.c"
     break;
 
   case 16: /* TypeVariable: tCHAR  */
-#line 57 "compil.y"
+#line 55 "compil.y"
              { current_type = 3; }
-#line 1383 "y.tab.c"
+#line 1381 "y.tab.c"
     break;
 
   case 17: /* NameVariable: tID  */
-#line 59 "compil.y"
+#line 57 "compil.y"
                    {
         
         (yyval.str) = (yyvsp[0].str);
     }
-#line 1392 "y.tab.c"
+#line 1390 "y.tab.c"
     break;
 
   case 28: /* IfStatement: tIF tPO Expression tPF Body  */
-#line 87 "compil.y"
+#line 85 "compil.y"
                                   {
         printf("[IF] condition temporaire idx = %d\n", (yyvsp[-2].nb));
         int label_else = next_label();
+        int label_end = next_label();
 
         f_write("JMF", (yyvsp[-2].nb), label_else, 0, 0, 0);
-        int label_end = next_label();
         // Bloc IF
         remove_all_tmp(); // Nettoyer avant le bloc
         // Code du corps généré dans $5
@@ -1406,30 +1404,29 @@ yyreduce:
         f_write("LABEL", label_else, 0, 0, 0, 0);
         f_write("LABEL", label_end, 0, 0, 0, 0);
     }
-#line 1410 "y.tab.c"
+#line 1408 "y.tab.c"
     break;
 
   case 29: /* IfStatement: tIF tPO Expression tPF Body tELSE Body  */
-#line 100 "compil.y"
+#line 98 "compil.y"
                                              {
-        printf("[IF-ELSE] condition temporaire idx = %d\n", (yyvsp[-4].nb));
         int label_else = next_label();
         int label_end = next_label();
 
         f_write("JMF", (yyvsp[-4].nb), label_else, 0, 0, 0);
-        // Bloc IF
-        remove_all_tmp();
+
+        // les instructions du bloc if (dans $5) sont déjà exécutées par yyparse
         f_write("JMP", label_end, 0, 0, 0, 0);
         f_write("LABEL", label_else, 0, 0, 0, 0);
-        // Bloc ELSE
-        remove_all_tmp();
+        
+        // idem ici, bloc else déjà parcouru
         f_write("LABEL", label_end, 0, 0, 0, 0);
     }
-#line 1429 "y.tab.c"
+#line 1426 "y.tab.c"
     break;
 
   case 30: /* Affectation: NameVariable tEGAL Expression  */
-#line 115 "compil.y"
+#line 113 "compil.y"
                                             {
     
     int idx = get_index_by_name((yyvsp[-2].str));
@@ -1448,11 +1445,11 @@ yyreduce:
         exit(1);
     }
 }
-#line 1452 "y.tab.c"
+#line 1449 "y.tab.c"
     break;
 
   case 31: /* Declaration: TypeVariable NameVariable  */
-#line 133 "compil.y"
+#line 131 "compil.y"
                                        {
     int idx = get_index_by_name((yyvsp[0].str));
     if (idx >= 0) {
@@ -1471,11 +1468,11 @@ yyreduce:
         remove_all_tmp();
     }
 }
-#line 1475 "y.tab.c"
+#line 1472 "y.tab.c"
     break;
 
   case 32: /* InitAffect: TypeVariable NameVariable tEGAL Expression  */
-#line 151 "compil.y"
+#line 149 "compil.y"
                                                         {
     int idx = get_index_by_name((yyvsp[-2].str));
     if (idx < 0) {
@@ -1494,11 +1491,11 @@ yyreduce:
         remove_all_tmp();
     }
 }
-#line 1498 "y.tab.c"
+#line 1495 "y.tab.c"
     break;
 
   case 33: /* Expression: Expression tADD Expression  */
-#line 171 "compil.y"
+#line 169 "compil.y"
                                  {
         printf("[ADD] %d + %d\n", (yyvsp[-2].nb), (yyvsp[0].nb));
         symbol* sym = malloc(sizeof(symbol));
@@ -1514,11 +1511,11 @@ yyreduce:
         (yyval.nb)=idx;
         f_write("ADD",idx, 0, (yyvsp[-2].nb), 0, (yyvsp[0].nb));
     }
-#line 1518 "y.tab.c"
+#line 1515 "y.tab.c"
     break;
 
   case 34: /* Expression: Expression tSOU Expression  */
-#line 186 "compil.y"
+#line 184 "compil.y"
                                  {
         printf("[SOU] %d - %d\n", (yyvsp[-2].nb), (yyvsp[0].nb));
         symbol* sym = malloc(sizeof(symbol));
@@ -1534,11 +1531,11 @@ yyreduce:
         (yyval.nb)=idx;
         f_write("SUB",idx, 0, (yyvsp[-2].nb), 0, (yyvsp[0].nb));
     }
-#line 1538 "y.tab.c"
+#line 1535 "y.tab.c"
     break;
 
   case 35: /* Expression: Expression tMUL Expression  */
-#line 201 "compil.y"
+#line 199 "compil.y"
                                 {
         printf("[MUL] %d * %d\n", (yyvsp[-2].nb), (yyvsp[0].nb));
         symbol* sym = malloc(sizeof(symbol));
@@ -1554,11 +1551,11 @@ yyreduce:
         (yyval.nb)=idx;
         f_write("MUL",idx, 0, (yyvsp[-2].nb), 0, (yyvsp[0].nb));
     }
-#line 1558 "y.tab.c"
+#line 1555 "y.tab.c"
     break;
 
   case 36: /* Expression: Expression tDIV Expression  */
-#line 216 "compil.y"
+#line 214 "compil.y"
                                  {
         printf("[DIV] %d / %d\n", (yyvsp[-2].nb), (yyvsp[0].nb));
         symbol* sym = malloc(sizeof(symbol));
@@ -1574,11 +1571,11 @@ yyreduce:
         (yyval.nb)=idx;
         f_write("DIV",idx, 0, (yyvsp[-2].nb), 0, (yyvsp[0].nb));
     }
-#line 1578 "y.tab.c"
+#line 1575 "y.tab.c"
     break;
 
   case 37: /* Expression: Expression tINF Expression  */
-#line 231 "compil.y"
+#line 229 "compil.y"
                                      {
         printf("[INF] %d < %d\n", (yyvsp[-2].nb), (yyvsp[0].nb));
         symbol* sym = malloc(sizeof(symbol));
@@ -1594,11 +1591,11 @@ yyreduce:
         (yyval.nb) = idx;
         f_write("INF", idx, 0, (yyvsp[-2].nb), 0, (yyvsp[0].nb));
     }
-#line 1598 "y.tab.c"
+#line 1595 "y.tab.c"
     break;
 
   case 38: /* Expression: Expression tSUP Expression  */
-#line 246 "compil.y"
+#line 244 "compil.y"
                                  {
         printf("[SUP] %d > %d\n", (yyvsp[-2].nb), (yyvsp[0].nb));
         symbol* sym = malloc(sizeof(symbol));
@@ -1614,11 +1611,11 @@ yyreduce:
         (yyval.nb) = idx;
         f_write("SUP", idx, 0, (yyvsp[-2].nb), 0, (yyvsp[0].nb));
     }
-#line 1618 "y.tab.c"
+#line 1615 "y.tab.c"
     break;
 
   case 39: /* Expression: Expression tEGAL_EGAL Expression  */
-#line 261 "compil.y"
+#line 259 "compil.y"
                                        {
         printf("[EGAL_EGAL] %d == %d\n", (yyvsp[-2].nb), (yyvsp[0].nb));
         symbol* sym = malloc(sizeof(symbol));
@@ -1634,11 +1631,11 @@ yyreduce:
         (yyval.nb) = idx;
         f_write("EQU", idx, 0, (yyvsp[-2].nb), 0, (yyvsp[0].nb));
     }
-#line 1638 "y.tab.c"
+#line 1635 "y.tab.c"
     break;
 
   case 40: /* Expression: Expression tDIFF Expression  */
-#line 276 "compil.y"
+#line 274 "compil.y"
                                   {
         printf("[DIFF] %d != %d\n", (yyvsp[-2].nb), (yyvsp[0].nb));
         symbol* sym = malloc(sizeof(symbol));
@@ -1654,11 +1651,11 @@ yyreduce:
         (yyval.nb) = idx;
         f_write("NEQ", idx, 0, (yyvsp[-2].nb), 0, (yyvsp[0].nb));
     }
-#line 1658 "y.tab.c"
+#line 1655 "y.tab.c"
     break;
 
   case 41: /* Expression: Expression tINF_EGAL Expression  */
-#line 291 "compil.y"
+#line 289 "compil.y"
                                       {
         printf("[INF_EGAL] %d <= %d\n", (yyvsp[-2].nb), (yyvsp[0].nb));
         symbol* sym = malloc(sizeof(symbol));
@@ -1674,11 +1671,11 @@ yyreduce:
         (yyval.nb) = idx;
         f_write("INFE", idx, 0, (yyvsp[-2].nb), 0, (yyvsp[0].nb));
     }
-#line 1678 "y.tab.c"
+#line 1675 "y.tab.c"
     break;
 
   case 42: /* Expression: Expression tSUP_EGAL Expression  */
-#line 306 "compil.y"
+#line 304 "compil.y"
                                       {
         printf("[SUP_EGAL] %d >= %d\n", (yyvsp[-2].nb), (yyvsp[0].nb));
         symbol* sym = malloc(sizeof(symbol));
@@ -1694,11 +1691,11 @@ yyreduce:
         (yyval.nb) = idx;
         f_write("SUPE", idx, 0, (yyvsp[-2].nb), 0, (yyvsp[0].nb));
     }
-#line 1698 "y.tab.c"
+#line 1695 "y.tab.c"
     break;
 
   case 43: /* Expression: tPO Expression tPF  */
-#line 322 "compil.y"
+#line 320 "compil.y"
                          {
         printf("[PARENTHESES] %d \n", (yyvsp[-1].nb));
         /*
@@ -1716,11 +1713,11 @@ yyreduce:
         (yyval.nb)=(yyvsp[-1].nb);
         f_write("COP",(yyvsp[-1].nb), 0, 0, 0, (yyvsp[-1].nb));
     }
-#line 1720 "y.tab.c"
+#line 1717 "y.tab.c"
     break;
 
   case 44: /* Expression: tNB  */
-#line 339 "compil.y"
+#line 337 "compil.y"
           {
         symbol* sym = malloc(sizeof(symbol));
         sym->type = VARIABLE;
@@ -1735,11 +1732,11 @@ yyreduce:
         (yyval.nb)=idx;
         f_write("AFC",idx, 0, 0, 1, (yyvsp[0].nb));
     }
-#line 1739 "y.tab.c"
+#line 1736 "y.tab.c"
     break;
 
   case 45: /* Expression: NameVariable  */
-#line 353 "compil.y"
+#line 351 "compil.y"
                    {
         
         int idx = get_index_by_name((yyvsp[0].str));
@@ -1754,11 +1751,11 @@ yyreduce:
         //f_write("COP",idx, 0, 0, 0, idx);
         (yyval.nb)=idx;
     }
-#line 1758 "y.tab.c"
+#line 1755 "y.tab.c"
     break;
 
 
-#line 1762 "y.tab.c"
+#line 1759 "y.tab.c"
 
       default: break;
     }
@@ -1951,7 +1948,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 372 "compil.y"
+#line 370 "compil.y"
 
 
 void yyerror(char *s) 

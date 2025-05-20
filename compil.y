@@ -5,7 +5,6 @@
 #include "table_symbole.h"
 #include "f_write_util.h"
 int yylex ();
-int var[26];
 void yyerror(char *s);
 int current_type;
 int label_counter = 0;
@@ -16,7 +15,6 @@ int next_label() {
 %}
 %union { 
   int nb; 
-  char var; 
   char* str;  // nom de variable
 }
 %type <str> NameVariable
@@ -98,19 +96,19 @@ IfStatement
         f_write("LABEL", label_end, 0, 0, 0, 0);
     }
     | tIF tPO Expression tPF Body tELSE Body {
-        printf("[IF-ELSE] condition temporaire idx = %d\n", $3);
         int label_else = next_label();
         int label_end = next_label();
 
         f_write("JMF", $3, label_else, 0, 0, 0);
-        // Bloc IF
-        remove_all_tmp();
+
+        // les instructions du bloc if (dans $5) sont déjà exécutées par yyparse
         f_write("JMP", label_end, 0, 0, 0, 0);
         f_write("LABEL", label_else, 0, 0, 0, 0);
-        // Bloc ELSE
-        remove_all_tmp();
+        
+        // idem ici, bloc else déjà parcouru
         f_write("LABEL", label_end, 0, 0, 0, 0);
-    };
+    }
+
 
 Affectation : NameVariable tEGAL Expression {
     

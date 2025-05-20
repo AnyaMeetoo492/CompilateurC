@@ -165,13 +165,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 17 "compil.y"
+#line 16 "compil.y"
  
   int nb; 
-  char var; 
   char* str;  // nom de variable
 
-#line 175 "y.tab.h"
+#line 174 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

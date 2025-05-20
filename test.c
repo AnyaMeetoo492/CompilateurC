@@ -2,13 +2,6 @@
 
 void main(){
     int a = 1;
-    if (a == 2){
-        a = 1;
-    }
-    else{
-        a = 4;
-    }
-    
     a = 3;
     int b = 5;
     int c = b;
