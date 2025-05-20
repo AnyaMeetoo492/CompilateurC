@@ -13,6 +13,9 @@ void main(int a){
     int e = a + 1;
     int f = (b + 1);
     int g = 3 * 5 - b;
+    int h = 1==2;
+    int i = 1!=2;
+    int j = 1<2;
     
 }
 

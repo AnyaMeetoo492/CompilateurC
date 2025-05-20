@@ -26,3 +26,15 @@ AFC 4 5
 MUL 5 0 4
 SUB 6 5 2
 COP 11 6
+AFC 0 1
+AFC 4 2
+# Instruction inconnue : EQU 252 254 253
+COP 12 5
+AFC 0 1
+AFC 4 2
+# Instruction inconnue : NEQ 252 254 253
+COP 13 5
+AFC 0 1
+AFC 4 2
+# Instruction inconnue : INF 252 254 253
+COP 14 5

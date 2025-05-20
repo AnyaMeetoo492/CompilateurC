@@ -22,6 +22,10 @@ int current_type;
 %token tVIDE tEGAL tPO tPF tSOU tADD tDIV tMUL tERROR tAO tAF tPOINT tCO tCF tINF tSUP tBACKSLASH tCHAPEAU tINTERROG tEXCALM tDOLLAR tPERCENT tPTVIRGULE tVIRGULE 
 %token tOR tAND tTILD tANDLOG tORLOG tDD tDG
 %token tIF tELSE tWHILE tFOR
+%token tEGAL_EGAL tDIFF tINF_EGAL tSUP_EGAL
+%left tEGAL_EGAL tDIFF
+%left tINF tSUP tINF_EGAL tSUP_EGAL
+
 
 %token tMAIN tRETURN 
 %token tVOID tINT tBOOL tCHAR tTRUE tFALSE
@@ -67,6 +71,8 @@ Instruction
     | Affectation tPTVIRGULE
     | Declaration tPTVIRGULE
     | InitAffect tPTVIRGULE
+    | IfStatement
+
     ;
 
 Retour 
@@ -189,9 +195,97 @@ Expression
         $$=idx;
         f_write("DIV",idx, 0, $1, 0, $3);
     }
-    | Expression tPERCENT Expression
-    | Expression tANDLOG Expression
-    | Expression tORLOG Expression {}
+        | Expression tINF Expression {
+        printf("[INF] %d < %d\n", $1, $3);
+        symbol* sym = malloc(sizeof(symbol));
+        sym->type = VARIABLE;
+        sym->scope = LOCAL;
+        sym->initialised = 1;
+        sym->name = strdup("tmp");
+        sym->value = -1;
+        sym->dtype = current_type;
+        
+        add_tmp(sym);
+        int idx = get_index(sym);
+        $$ = idx;
+        f_write("INF", idx, 0, $1, 0, $3);
+    }
+    | Expression tSUP Expression {
+        printf("[SUP] %d > %d\n", $1, $3);
+        symbol* sym = malloc(sizeof(symbol));
+        sym->type = VARIABLE;
+        sym->scope = LOCAL;
+        sym->initialised = 1;
+        sym->name = strdup("tmp");
+        sym->value = -1;
+        sym->dtype = current_type;
+
+        add_tmp(sym);
+        int idx = get_index(sym);
+        $$ = idx;
+        f_write("SUP", idx, 0, $1, 0, $3);
+    }
+    | Expression tEGAL_EGAL Expression {
+        printf("[EGAL_EGAL] %d == %d\n", $1, $3);
+        symbol* sym = malloc(sizeof(symbol));
+        sym->type = VARIABLE;
+        sym->scope = LOCAL;
+        sym->initialised = 1;
+        sym->name = strdup("tmp");
+        sym->value = -1;
+        sym->dtype = current_type;
+
+        add_tmp(sym);
+        int idx = get_index(sym);
+        $$ = idx;
+        f_write("EQU", idx, 0, $1, 0, $3);
+    }
+    | Expression tDIFF Expression {
+        printf("[DIFF] %d != %d\n", $1, $3);
+        symbol* sym = malloc(sizeof(symbol));
+        sym->type = VARIABLE;
+        sym->scope = LOCAL;
+        sym->initialised = 1;
+        sym->name = strdup("tmp");
+        sym->value = -1;
+        sym->dtype = current_type;
+
+        add_tmp(sym);
+        int idx = get_index(sym);
+        $$ = idx;
+        f_write("NEQ", idx, 0, $1, 0, $3);
+    }
+    | Expression tINF_EGAL Expression {
+        printf("[INF_EGAL] %d <= %d\n", $1, $3);
+        symbol* sym = malloc(sizeof(symbol));
+        sym->type = VARIABLE;
+        sym->scope = LOCAL;
+        sym->initialised = 1;
+        sym->name = strdup("tmp");
+        sym->value = -1;
+        sym->dtype = current_type;
+
+        add_tmp(sym);
+        int idx = get_index(sym);
+        $$ = idx;
+        f_write("INFE", idx, 0, $1, 0, $3);
+    }
+    | Expression tSUP_EGAL Expression {
+        printf("[SUP_EGAL] %d >= %d\n", $1, $3);
+        symbol* sym = malloc(sizeof(symbol));
+        sym->type = VARIABLE;
+        sym->scope = LOCAL;
+        sym->initialised = 1;
+        sym->name = strdup("tmp");
+        sym->value = -1;
+        sym->dtype = current_type;
+
+        add_tmp(sym);
+        int idx = get_index(sym);
+        $$ = idx;
+        f_write("SUPE", idx, 0, $1, 0, $3);
+    }
+
     | tPO Expression tPF {
         printf("[PARENTHESES] %d \n", $2);
         /*

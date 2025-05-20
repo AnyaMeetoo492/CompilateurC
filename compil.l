@@ -51,8 +51,6 @@ false { return tFALSE; }
 "," { return tVIRGULE;}
 "" { return tVIDE;}
 
-"<"	{ return tINF;}
-">"	{ return tSUP;}
 ">>" { return tDD;}
 "<<" { return tDG;}
 
@@ -67,6 +65,14 @@ false { return tFALSE; }
 
 "&&" { return tANDLOG;}
 "||" { return tORLOG;}
+
+"=="    { return tEGAL_EGAL; }
+"!="    { return tDIFF; }
+"<="    { return tINF_EGAL; }
+">="    { return tSUP_EGAL; }
+"<"     { return tINF; }
+">"     { return tSUP; }
+
 
 
 \n	{ }

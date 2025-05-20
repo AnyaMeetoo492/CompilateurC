@@ -35,7 +35,11 @@ void f_write(const char *op, int dest, int type1, int op1, int type2, int op2) {
     }
     // Instructions à 3 opérandes : ADD, SUB, MUL, DIV
     else if (strcmp(op, "ADD") == 0 || strcmp(op, "SUB") == 0 ||
-             strcmp(op, "MUL") == 0 || strcmp(op, "DIV") == 0) {
+             strcmp(op, "MUL") == 0 || strcmp(op, "DIV") == 0 || 
+             strcmp(op, "EQU") == 0 || strcmp(op, "INF") == 0 ||
+             strcmp(op, "INFE") == 0 || strcmp(op, "SUP") == 0 ||
+             strcmp(op, "SUPE") == 0 || strcmp(op, "AND") == 0 ||
+             strcmp(op, "NEQ") == 0 ) {
         snprintf(line, sizeof(line), "%s %d %d %d", op, dest, op1, op2);
         snprintf(comment + strlen(comment), sizeof(comment) - strlen(comment),
                  "mémoire[%d] = ", dest);

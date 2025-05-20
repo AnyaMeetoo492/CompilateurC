@@ -91,14 +91,18 @@ extern int yydebug;
     tELSE = 292,                   /* tELSE  */
     tWHILE = 293,                  /* tWHILE  */
     tFOR = 294,                    /* tFOR  */
-    tMAIN = 295,                   /* tMAIN  */
-    tRETURN = 296,                 /* tRETURN  */
-    tVOID = 297,                   /* tVOID  */
-    tINT = 298,                    /* tINT  */
-    tBOOL = 299,                   /* tBOOL  */
-    tCHAR = 300,                   /* tCHAR  */
-    tTRUE = 301,                   /* tTRUE  */
-    tFALSE = 302                   /* tFALSE  */
+    tEGAL_EGAL = 295,              /* tEGAL_EGAL  */
+    tDIFF = 296,                   /* tDIFF  */
+    tINF_EGAL = 297,               /* tINF_EGAL  */
+    tSUP_EGAL = 298,               /* tSUP_EGAL  */
+    tMAIN = 299,                   /* tMAIN  */
+    tRETURN = 300,                 /* tRETURN  */
+    tVOID = 301,                   /* tVOID  */
+    tINT = 302,                    /* tINT  */
+    tBOOL = 303,                   /* tBOOL  */
+    tCHAR = 304,                   /* tCHAR  */
+    tTRUE = 305,                   /* tTRUE  */
+    tFALSE = 306                   /* tFALSE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -144,14 +148,18 @@ extern int yydebug;
 #define tELSE 292
 #define tWHILE 293
 #define tFOR 294
-#define tMAIN 295
-#define tRETURN 296
-#define tVOID 297
-#define tINT 298
-#define tBOOL 299
-#define tCHAR 300
-#define tTRUE 301
-#define tFALSE 302
+#define tEGAL_EGAL 295
+#define tDIFF 296
+#define tINF_EGAL 297
+#define tSUP_EGAL 298
+#define tMAIN 299
+#define tRETURN 300
+#define tVOID 301
+#define tINT 302
+#define tBOOL 303
+#define tCHAR 304
+#define tTRUE 305
+#define tFALSE 306
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -163,7 +171,7 @@ union YYSTYPE
   char var; 
   char* str;  // nom de variable
 
-#line 167 "y.tab.h"
+#line 175 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
