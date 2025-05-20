@@ -710,7 +710,7 @@ static const yytype_uint8 yyrline[] =
        0,    34,    34,    34,    34,    36,    37,    39,    39,    41,
       41,    42,    42,    45,    46,    47,    48,    50,    56,    57,
       61,    62,    66,    67,    68,    69,    73,    76,    94,   112,
-     132,   147,   148,   149,   150,   151,   152,   153,   170,   184
+     132,   147,   162,   177,   192,   193,   194,   195,   212,   226
 };
 #endif
 
@@ -1449,14 +1449,74 @@ yyreduce:
 #line 1450 "y.tab.c"
     break;
 
+  case 31: /* Expression: Expression tSOU Expression  */
+#line 147 "compil.y"
+                                 {
+        printf("[SOU] %d - %d\n", (yyvsp[-2].nb), (yyvsp[0].nb));
+        symbol* sym = malloc(sizeof(symbol));
+        sym->type = VARIABLE;
+        sym->scope = LOCAL;
+        sym->initialised = 1;
+        sym->name = strdup("tmp");
+        sym->value = -1;
+        sym->dtype = current_type;
+        
+        add_tmp(sym);
+        int idx=get_index(sym);
+        (yyval.nb)=idx;
+        f_write("SUB",idx, 0, (yyvsp[-2].nb), 0, (yyvsp[0].nb));
+    }
+#line 1470 "y.tab.c"
+    break;
+
+  case 32: /* Expression: Expression tMUL Expression  */
+#line 162 "compil.y"
+                                {
+        printf("[MUL] %d * %d\n", (yyvsp[-2].nb), (yyvsp[0].nb));
+        symbol* sym = malloc(sizeof(symbol));
+        sym->type = VARIABLE;
+        sym->scope = LOCAL;
+        sym->initialised = 1;
+        sym->name = strdup("tmp");
+        sym->value = -1;
+        sym->dtype = current_type;
+        
+        add_tmp(sym);
+        int idx=get_index(sym);
+        (yyval.nb)=idx;
+        f_write("MUL",idx, 0, (yyvsp[-2].nb), 0, (yyvsp[0].nb));
+    }
+#line 1490 "y.tab.c"
+    break;
+
+  case 33: /* Expression: Expression tDIV Expression  */
+#line 177 "compil.y"
+                                 {
+        printf("[DIV] %d / %d\n", (yyvsp[-2].nb), (yyvsp[0].nb));
+        symbol* sym = malloc(sizeof(symbol));
+        sym->type = VARIABLE;
+        sym->scope = LOCAL;
+        sym->initialised = 1;
+        sym->name = strdup("tmp");
+        sym->value = -1;
+        sym->dtype = current_type;
+        
+        add_tmp(sym);
+        int idx=get_index(sym);
+        (yyval.nb)=idx;
+        f_write("DIV",idx, 0, (yyvsp[-2].nb), 0, (yyvsp[0].nb));
+    }
+#line 1510 "y.tab.c"
+    break;
+
   case 36: /* Expression: Expression tORLOG Expression  */
-#line 152 "compil.y"
+#line 194 "compil.y"
                                    {}
-#line 1456 "y.tab.c"
+#line 1516 "y.tab.c"
     break;
 
   case 37: /* Expression: tPO Expression tPF  */
-#line 153 "compil.y"
+#line 195 "compil.y"
                          {
         printf("[PARENTHESES] %d \n", (yyvsp[-1].nb));
         /*
@@ -1474,11 +1534,11 @@ yyreduce:
         (yyval.nb)=(yyvsp[-1].nb);
         f_write("COP",(yyvsp[-1].nb), 0, 0, 0, (yyvsp[-1].nb));
     }
-#line 1478 "y.tab.c"
+#line 1538 "y.tab.c"
     break;
 
   case 38: /* Expression: tNB  */
-#line 170 "compil.y"
+#line 212 "compil.y"
           {
         symbol* sym = malloc(sizeof(symbol));
         sym->type = VARIABLE;
@@ -1493,11 +1553,11 @@ yyreduce:
         (yyval.nb)=idx;
         f_write("AFC",idx, 0, 0, 1, (yyvsp[0].nb));
     }
-#line 1497 "y.tab.c"
+#line 1557 "y.tab.c"
     break;
 
   case 39: /* Expression: NameVariable  */
-#line 184 "compil.y"
+#line 226 "compil.y"
                    {
         
         int idx = get_index_by_name((yyvsp[0].str));
@@ -1512,11 +1572,11 @@ yyreduce:
         //f_write("COP",idx, 0, 0, 0, idx);
         (yyval.nb)=idx;
     }
-#line 1516 "y.tab.c"
+#line 1576 "y.tab.c"
     break;
 
 
-#line 1520 "y.tab.c"
+#line 1580 "y.tab.c"
 
       default: break;
     }
@@ -1709,7 +1769,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 203 "compil.y"
+#line 245 "compil.y"
 
 
 void yyerror(char *s) 

@@ -144,9 +144,51 @@ Expression
         $$=idx;
         f_write("ADD",idx, 0, $1, 0, $3);
     }
-    | Expression tSOU Expression
-    | Expression tMUL Expression
-    | Expression tDIV Expression
+    | Expression tSOU Expression {
+        printf("[SOU] %d - %d\n", $1, $3);
+        symbol* sym = malloc(sizeof(symbol));
+        sym->type = VARIABLE;
+        sym->scope = LOCAL;
+        sym->initialised = 1;
+        sym->name = strdup("tmp");
+        sym->value = -1;
+        sym->dtype = current_type;
+        
+        add_tmp(sym);
+        int idx=get_index(sym);
+        $$=idx;
+        f_write("SUB",idx, 0, $1, 0, $3);
+    }
+    | Expression tMUL Expression{
+        printf("[MUL] %d * %d\n", $1, $3);
+        symbol* sym = malloc(sizeof(symbol));
+        sym->type = VARIABLE;
+        sym->scope = LOCAL;
+        sym->initialised = 1;
+        sym->name = strdup("tmp");
+        sym->value = -1;
+        sym->dtype = current_type;
+        
+        add_tmp(sym);
+        int idx=get_index(sym);
+        $$=idx;
+        f_write("MUL",idx, 0, $1, 0, $3);
+    }
+    | Expression tDIV Expression {
+        printf("[DIV] %d / %d\n", $1, $3);
+        symbol* sym = malloc(sizeof(symbol));
+        sym->type = VARIABLE;
+        sym->scope = LOCAL;
+        sym->initialised = 1;
+        sym->name = strdup("tmp");
+        sym->value = -1;
+        sym->dtype = current_type;
+        
+        add_tmp(sym);
+        int idx=get_index(sym);
+        $$=idx;
+        f_write("DIV",idx, 0, $1, 0, $3);
+    }
     | Expression tPERCENT Expression
     | Expression tANDLOG Expression
     | Expression tORLOG Expression {}

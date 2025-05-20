@@ -12,6 +12,7 @@ void main(int a){
     d = 4 + a;
     int e = a + 1;
     int f = (b + 1);
+    int g = 3 * 5 - b;
     
 }
 
