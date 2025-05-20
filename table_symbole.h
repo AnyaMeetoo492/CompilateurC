@@ -68,6 +68,7 @@ void add_tmp(symbol* sym);
 void remove_symbol(symbol* sym);
 
 void remove_tmp();
+void remove_all_tmp();
 
 void modify_symbol(symbol* sym, symbol* new_sym);
 

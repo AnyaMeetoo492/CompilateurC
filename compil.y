@@ -15,8 +15,7 @@ int current_type;
   char* str;  // nom de variable
 }
 %type <str> NameVariable
-%type <expr> Expression
-%type <nb> Value
+%type <nb> Expression
 
 %token <nb> tNB
 %token <str> tID
@@ -67,7 +66,7 @@ Instruction
     : Retour tPTVIRGULE
     | Affectation tPTVIRGULE
     | Expression tPTVIRGULE
-    | Initialisation tPTVIRGULE
+    | Declaration tPTVIRGULE
     | InitAffect tPTVIRGULE
     ;
 
@@ -78,39 +77,28 @@ Retour
 Affectation : NameVariable tEGAL Expression {
     
     int idx = get_index_by_name($1);
-    printf("[Affectation] index de variable %d\n", idx);
     if (idx >= 0) {
+
+        printf("[Affectation Expression] %s = %d\n", $1, $3);
         symbol* sym = get_symbol(idx);
-        
+        sym->name = strdup($1);
         sym->initialised = 1;
         sym->value = $3;
         f_write("COP", idx, 0, 0, 0, $3);
-        printf("[Affectation Expression] %s = %d\n", $1, $3);
+        printf("[Affectation] %s idx = %d\n", $1,idx);
+        remove_all_tmp();
     } else {
         printf("[ERROR] Variable %s pas déclarée\n", $1);
         exit(1);
     }
-}; | NameVariable tEGAL Value {
-    int idx = get_index_by_name($1);
-    if (idx >= 0) {
-        printf("[Affectation Value] %s = %d\n", $1, $3);
-        symbol* sym = get_symbol(idx);
-        
-        sym->initialised = 1;
-        sym->value = $3;
-        f_write("AFC", idx, 0, 0, 1, $3);
-    } else {
-        printf("[ERROR] Variable %s pas déclarée\n", $1);
-        exit(1);
-    }
-}
-Initialisation : TypeVariable NameVariable{
+}; 
+Declaration : TypeVariable NameVariable{
     int idx = get_index_by_name($2);
     if (idx >= 0) {
         printf("[ERROR] Variable %s déjà déclarée\n", $2);
         exit(1);
     } else {
-        printf("[Initialisation] %s\n", $2);
+        printf("[Declaration] %s\n", $2);
         symbol* sym = malloc(sizeof(symbol));
         sym->name = strdup($2);
         sym->type = VARIABLE;
@@ -119,6 +107,7 @@ Initialisation : TypeVariable NameVariable{
         sym->value = 0;
         sym->dtype = current_type;
         add_symbol(sym);
+        remove_all_tmp();
     }
 };
 InitAffect : TypeVariable NameVariable tEGAL Expression {
@@ -135,24 +124,11 @@ InitAffect : TypeVariable NameVariable tEGAL Expression {
 
         idx=get_index(sym);
         printf("[InitAfect Expression] %s\n", $2);
-        f_write("AFC", idx, 0, 0, 0, $4);
+        f_write("COP", idx, 0, 0, 0, $4);
+        remove_all_tmp();
     }
-}; | TypeVariable NameVariable tEGAL Value {
-    int idx = get_index_by_name($2);
-    if (idx < 0) {
-        symbol* sym = malloc(sizeof(symbol));
-        sym->name = strdup($2);
-        sym->type = VARIABLE;
-        sym->scope = LOCAL;
-        sym->initialised = 1;
-        sym->value = $4;
-        sym->dtype = current_type;
-        add_symbol(sym);
-        idx=get_index(sym);
-        printf("[InitAfect Value] %s\n", $2);
-        f_write("AFC", idx, 0, 0, 1, $4);
-    }
-}
+};
+
 Expression
     : Expression tADD Expression {
         printf("[ADD] %d + %d\n", $1, $3);
@@ -178,37 +154,28 @@ Expression
     | tPO Expression tPF {
         
     }
-    | Value {
+    | tNB {
+        symbol* sym = malloc(sizeof(symbol));
+        sym->type = VARIABLE;
+        sym->scope = LOCAL;
+        sym->initialised = 1;
+        sym->name = strdup("tmp");
+        sym->value = -1;
+        sym->dtype = current_type;
         
+        add_tmp(sym);
+        int idx=get_index(sym);
+        $$=idx;
+        f_write("AFC",idx, 0, 0, 1, $1);
+    }
+    | NameVariable {
+        
+        int idx = get_index_by_name($1);
+        //f_write("COP",idx, 0, 0, 0, idx);
+        $$=idx;
     }
     ;
 
-Value
-    : NameVariable {
-        int idx = get_index_by_name($1);
-        if (idx >= 0) {
-            symbol* sym = get_symbol(idx);
-            if (sym->initialised == 0) {
-                printf("[ERROR] Variable %s non initialisée\n", $1);
-                exit(1);
-            }
-            $$ = idx;
-        } else {
-            printf("[ERROR] Variable %s non déclarée\n", $1);
-            exit(1);
-        }
-    }
-    | tNB {
-        
-        $$ = $1;
-    }
-    | tTRUE {
-        $$ = 1;
-    }
-    | tFALSE {
-        $$ = 0;
-    }
-    ;
 
 
 

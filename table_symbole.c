@@ -108,6 +108,10 @@ void remove_tmp() {
         temp_index++;
     }
 }
+void remove_all_tmp() {
+    
+    temp_index = 254;
+}
 
 // Modifier un symbole
 void modify_symbol(symbol* sym, symbol* new_sym) {
