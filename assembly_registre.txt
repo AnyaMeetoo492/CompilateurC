@@ -1,0 +1,27 @@
+li $t254, 3        # mémoire[254] ← 3
+move $t0, $t254    # mémoire[0] ← mémoire[254]
+li $t254, 5        # mémoire[254] ← 5
+move $t1, $t254    # mémoire[1] ← mémoire[254]
+move $t2, $t1    # mémoire[2] ← mémoire[1]
+add $t254, $t1, $t2  # mémoire[254] ← mémoire[1] + mémoire[2]
+move $t0, $t254    # mémoire[0] ← mémoire[254]
+li $t254, 11        # mémoire[254] ← 11
+add $t253, $t0, $t254  # mémoire[253] ← mémoire[0] + mémoire[254]
+li $t252, 5        # mémoire[252] ← 5
+add $t251, $t253, $t252  # mémoire[251] ← mémoire[253] + mémoire[252]
+add $t250, $t251, $t1  # mémoire[250] ← mémoire[251] + mémoire[1]
+move $t0, $t250    # mémoire[0] ← mémoire[250]
+li $t254, 1        # mémoire[254] ← 1
+li $t253, 2        # mémoire[253] ← 2
+add $t252, $t254, $t253  # mémoire[252] ← mémoire[254] + mémoire[253]
+move $t252, $t252    # mémoire[252] ← mémoire[252]
+li $t251, 4        # mémoire[251] ← 4
+add $t250, $t252, $t251  # mémoire[250] ← mémoire[252] + mémoire[251]
+add $t249, $t250, $t0  # mémoire[249] ← mémoire[250] + mémoire[0]
+move $t3, $t249    # mémoire[3] ← mémoire[249]
+li $t254, 1        # mémoire[254] ← 1
+add $t253, $t0, $t254  # mémoire[253] ← mémoire[0] + mémoire[254]
+move $t4, $t253    # mémoire[4] ← mémoire[253]
+li $t254, 1        # mémoire[254] ← 1
+add $t253, $t1, $t254  # mémoire[253] ← mémoire[1] + mémoire[254]
+move $t5, $t253    # mémoire[5] ← mémoire[253]

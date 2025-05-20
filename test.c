@@ -9,9 +9,9 @@ void main(int a){
 
     a = a + 11 + 5 + b;
     int d;
-    d = (1 + 2) + 4 + a;
+    d = 4 + a;
     int e = a + 1;
-    int f = b + 1;
+    int f = (b + 1);
     
 }
 
