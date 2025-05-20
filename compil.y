@@ -39,7 +39,7 @@ Fonction : TypeVariable tID  ArgFormat Body
 TypeMain : tINT | tVOID 
 
 ArgFormat : tPO tPF | tPO ArgList tPF
-ArgList : TypeVariable NameVariable | TypeVariable NameVariable tVIRGULE ArgList
+ArgList : Declaration | Declaration tVIRGULE ArgList
 
 TypeVariable 
     : tINT   { current_type = 0; }
@@ -65,7 +65,6 @@ Instructions
 Instruction
     : Retour tPTVIRGULE
     | Affectation tPTVIRGULE
-    | Expression tPTVIRGULE
     | Declaration tPTVIRGULE
     | InitAffect tPTVIRGULE
     ;
@@ -152,7 +151,21 @@ Expression
     | Expression tANDLOG Expression
     | Expression tORLOG Expression {}
     | tPO Expression tPF {
+        printf("[PARENTHESES] %d \n", $2);
+        /*
+        symbol* sym = malloc(sizeof(symbol));
+        sym->type = VARIABLE;
+        sym->scope = LOCAL;
+        sym->initialised = 1;
+        sym->name = strdup("tmp");
+        sym->value = -1;
+        sym->dtype = current_type;
         
+        add_tmp(sym);
+        int idx=get_index(sym);
+        */
+        $$=$2;
+        f_write("COP",$2, 0, 0, 0, $2);
     }
     | tNB {
         symbol* sym = malloc(sizeof(symbol));
@@ -171,6 +184,14 @@ Expression
     | NameVariable {
         
         int idx = get_index_by_name($1);
+        if (idx < 0) {
+            printf("[ERROR] Variable %s pas déclarée\n", $1);
+            exit(1);
+        }
+        if (get_symbol(idx)->initialised == 0) {
+            printf("[ERROR] Variable %s pas initialisée\n", $1);
+            exit(1);
+        }
         //f_write("COP",idx, 0, 0, 0, idx);
         $$=idx;
     }

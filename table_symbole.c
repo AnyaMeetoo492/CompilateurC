@@ -110,7 +110,9 @@ void remove_tmp() {
 }
 void remove_all_tmp() {
     
-    temp_index = 254;
+    while (temp_index != 254){
+        remove_tmp();
+    }
 }
 
 // Modifier un symbole
