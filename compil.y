@@ -119,12 +119,12 @@ Affectation : NameVariable tEGAL Expression {
         symbol* sym = get_symbol(idx);
         sym->name = strdup($1);
         sym->initialised = 1;
-        sym->value = $3;
         f_write("COP", idx, 0, 0, 0, $3);
         printf("[Affectation] %s idx = %d\n", $1,idx);
+        
         remove_all_tmp();
     } else {
-        printf("[ERROR] Variable %s pas déclarée\n", $1);
+        printf("[ERROR] Variable %s non déclarée\n", $1);
         exit(1);
     }
 }; 
@@ -140,9 +140,9 @@ Declaration : TypeVariable NameVariable{
         sym->type = VARIABLE;
         sym->scope = LOCAL;
         sym->initialised = 0;
-        sym->value = 0;
         sym->dtype = current_type;
         add_symbol(sym);
+        print_table();
         remove_all_tmp();
     }
 };
@@ -154,7 +154,6 @@ InitAffect : TypeVariable NameVariable tEGAL Expression {
         sym->type = VARIABLE;
         sym->scope = LOCAL;
         sym->initialised = 1;
-        sym->value = $4;
         sym->dtype = current_type;
         add_symbol(sym);
 
@@ -173,7 +172,6 @@ Expression
         sym->scope = LOCAL;
         sym->initialised = 1;
         sym->name = strdup("tmp");
-        sym->value = -1;
         sym->dtype = current_type;
         
         add_tmp(sym);
@@ -188,7 +186,6 @@ Expression
         sym->scope = LOCAL;
         sym->initialised = 1;
         sym->name = strdup("tmp");
-        sym->value = -1;
         sym->dtype = current_type;
         
         add_tmp(sym);
@@ -203,7 +200,6 @@ Expression
         sym->scope = LOCAL;
         sym->initialised = 1;
         sym->name = strdup("tmp");
-        sym->value = -1;
         sym->dtype = current_type;
         
         add_tmp(sym);
@@ -218,7 +214,6 @@ Expression
         sym->scope = LOCAL;
         sym->initialised = 1;
         sym->name = strdup("tmp");
-        sym->value = -1;
         sym->dtype = current_type;
         
         add_tmp(sym);
@@ -233,7 +228,6 @@ Expression
         sym->scope = LOCAL;
         sym->initialised = 1;
         sym->name = strdup("tmp");
-        sym->value = -1;
         sym->dtype = current_type;
         
         add_tmp(sym);
@@ -248,7 +242,6 @@ Expression
         sym->scope = LOCAL;
         sym->initialised = 1;
         sym->name = strdup("tmp");
-        sym->value = -1;
         sym->dtype = current_type;
 
         add_tmp(sym);
@@ -263,7 +256,6 @@ Expression
         sym->scope = LOCAL;
         sym->initialised = 1;
         sym->name = strdup("tmp");
-        sym->value = -1;
         sym->dtype = current_type;
 
         add_tmp(sym);
@@ -278,7 +270,6 @@ Expression
         sym->scope = LOCAL;
         sym->initialised = 1;
         sym->name = strdup("tmp");
-        sym->value = -1;
         sym->dtype = current_type;
 
         add_tmp(sym);
@@ -293,7 +284,6 @@ Expression
         sym->scope = LOCAL;
         sym->initialised = 1;
         sym->name = strdup("tmp");
-        sym->value = -1;
         sym->dtype = current_type;
 
         add_tmp(sym);
@@ -308,7 +298,6 @@ Expression
         sym->scope = LOCAL;
         sym->initialised = 1;
         sym->name = strdup("tmp");
-        sym->value = -1;
         sym->dtype = current_type;
 
         add_tmp(sym);
@@ -319,18 +308,6 @@ Expression
 
     | tPO Expression tPF {
         printf("[PARENTHESES] %d \n", $2);
-        /*
-        symbol* sym = malloc(sizeof(symbol));
-        sym->type = VARIABLE;
-        sym->scope = LOCAL;
-        sym->initialised = 1;
-        sym->name = strdup("tmp");
-        sym->value = -1;
-        sym->dtype = current_type;
-        
-        add_tmp(sym);
-        int idx=get_index(sym);
-        */
         $$=$2;
         f_write("COP",$2, 0, 0, 0, $2);
     }
@@ -340,7 +317,6 @@ Expression
         sym->scope = LOCAL;
         sym->initialised = 1;
         sym->name = strdup("tmp");
-        sym->value = -1;
         sym->dtype = current_type;
         
         add_tmp(sym);
@@ -352,11 +328,11 @@ Expression
         
         int idx = get_index_by_name($1);
         if (idx < 0) {
-            printf("[ERROR] Variable %s pas déclarée\n", $1);
+            printf("[ERROR] Variable %s non-déclarée\n", $1);
             exit(1);
         }
         if (get_symbol(idx)->initialised == 0) {
-            printf("[ERROR] Variable %s pas initialisée\n", $1);
+            printf("[ERROR]  Variable %s utilisée avant d'être affectée\n", $1);
             exit(1);
         }
         //f_write("COP",idx, 0, 0, 0, idx);

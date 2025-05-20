@@ -1,9 +1,14 @@
 
 
-void main(){
-    int a = 1;
+void main(int a, int b){
+    a = 1;
     a = 3;
-    int b = 5;
+    if (a == 1) {
+        a = 2;
+    } else {
+        a = 3;
+    }
+    b = 5;
     int c = b;
     a = b + c;
     a = a + 11 + 5 + b;

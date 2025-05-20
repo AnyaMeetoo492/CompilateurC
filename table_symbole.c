@@ -32,8 +32,7 @@ int compare_symbol(const symbol* sym1, const symbol* sym2) {
     if (sym1->type != sym2->type || 
         sym1->scope != sym2->scope || 
         sym1->initialised != sym2->initialised ||   
-        sym1->dtype != sym2->dtype ||
-        sym1->value != sym2->value){
+        sym1->dtype != sym2->dtype){
         return 0;
     }
     
@@ -131,10 +130,10 @@ int get_index_by_name(const char* name) {
     return -1;
 }
 void print_table(){
-    printf("=======================================================================\n");
-    printf("|                    SYMBOL TABLE, TABLE SIZE = %ld                    |\n", ARRAYSIZE(table_symbol));
-    printf("=======================================================================\n");
-    printf("| index |    type     | scope | datatype | initialised | name | values |\n");
+    printf("==================================================================\n");
+    printf("|                    SYMBOL TABLE, TABLE SIZE = %ld              |\n", ARRAYSIZE(table_symbol));
+    printf("=================================================================\n");
+    printf("| index |    type     | scope | datatype | initialised | name | \n");
 
     for (int i = 0; i < ARRAYSIZE(table_symbol); i++) {
         symbol * s = get_symbol(i);
@@ -151,20 +150,19 @@ void print_table(){
             DATATYPE2STR(s->dtype, datatype);
             BOOLTYPE2STR(s->initialised, initialised);
 
-            printf("| %5d | %11s | %5s | %8s | %11s | %4s | %6d |\n",
+            printf("| %5d | %11s | %5s | %8s | %11s | %4s |\n",
                 i, 
                 type, 
                 scope, 
                 datatype, 
                 initialised, 
-                s->name, 
-                s->value
+                s->name
             );
 
         }
     }
 
-    printf("=======================================================================\n");
+    printf("=============================================================\n");
 
 } 
 void free_table() {

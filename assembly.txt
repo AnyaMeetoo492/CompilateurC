@@ -2,6 +2,16 @@ AFC 254 1            ; mémoire[254] = 1
 COP 0 254            ; mémoire[0] = mémoire[254]
 AFC 254 3            ; mémoire[254] = 3
 COP 0 254            ; mémoire[0] = mémoire[254]
+AFC 254 1            ; mémoire[254] = 1
+EQU 253 0 254        ; mémoire[253] = mémoire[0] EQU mémoire[254]
+AFC 252 2            ; mémoire[252] = 2
+COP 0 252            ; mémoire[0] = mémoire[252]
+AFC 254 3            ; mémoire[254] = 3
+COP 0 254            ; mémoire[0] = mémoire[254]
+JMF 253 0            ; si mémoire[0] == 0, saute à l'instruction 253
+JMP 1                ; saute à l'instruction 1
+LABEL 0              LABEL 0
+LABEL 1              LABEL 1
 AFC 254 5            ; mémoire[254] = 5
 COP 1 254            ; mémoire[1] = mémoire[254]
 COP 2 1              ; mémoire[2] = mémoire[1]

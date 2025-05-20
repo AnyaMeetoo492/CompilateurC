@@ -10,7 +10,6 @@ void main(){
         VARIABLE, 
         LOCAL,
         1,
-        25,
         INT
     };
 
@@ -19,7 +18,6 @@ void main(){
         VARIABLE, 
         LOCAL,
         1,
-        25,
         INT
     };
 
@@ -28,7 +26,6 @@ void main(){
         VARIABLE, 
         LOCAL,
         1,
-        25,
         INT
     };
 

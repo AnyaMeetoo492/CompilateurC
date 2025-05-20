@@ -51,7 +51,6 @@ typedef struct {
     enum symboltype type;
     enum scopetype scope;
     int initialised; // bool
-    int value;
     enum datatype dtype;
 } symbol;
 
