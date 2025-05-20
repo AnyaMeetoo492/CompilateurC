@@ -15,7 +15,7 @@ int current_type;
   char* str;  // nom de variable
 }
 %type <str> NameVariable
-%type <nb> Expression
+%type <expr> Expression
 %type <nb> Value
 
 %token <nb> tNB
@@ -84,7 +84,7 @@ Affectation : NameVariable tEGAL Expression {
         
         sym->initialised = 1;
         sym->value = $3;
-        f_write("COP", idx, 0, 0, 0, $3);//PAS SURRRRRRRRRRR
+        f_write("COP", idx, 0, 0, 0, $3);
         printf("[Affectation Expression] %s = %d\n", $1, $3);
     } else {
         printf("[ERROR] Variable %s pas déclarée\n", $1);
@@ -134,7 +134,7 @@ InitAffect : TypeVariable NameVariable tEGAL Expression {
         add_symbol(sym);
 
         idx=get_index(sym);
-        printf("[InitAfect] %s\n", $2);
+        printf("[InitAfect Expression] %s\n", $2);
         f_write("AFC", idx, 0, 0, 0, $4);
     }
 }; | TypeVariable NameVariable tEGAL Value {
@@ -149,19 +149,21 @@ InitAffect : TypeVariable NameVariable tEGAL Expression {
         sym->dtype = current_type;
         add_symbol(sym);
         idx=get_index(sym);
-        printf("[InitAfect] %s\n", $2);
+        printf("[InitAfect Value] %s\n", $2);
         f_write("AFC", idx, 0, 0, 1, $4);
     }
 }
 Expression
     : Expression tADD Expression {
-        printf("[ADD]\n");
+        printf("[ADD] %d + %d\n", $1, $3);
         symbol* sym = malloc(sizeof(symbol));
         sym->type = VARIABLE;
         sym->scope = LOCAL;
         sym->initialised = 1;
+        sym->name = strdup("tmp");
         sym->value = -1;
         sym->dtype = current_type;
+        
         add_tmp(sym);
         int idx=get_index(sym);
         $$=idx;
@@ -224,15 +226,10 @@ int main(void) {
 
   FILE *f = fopen("assembly.txt", "w");
   
-  int indx = get_index_by_name("b");
-
-  printf("Index de b : %d\n", indx);
   yyparse();
   
   printf(">> Fin yyparse\n");
   print_table();
-  indx = get_index_by_name("b");
-  printf("Index de b : %d\n", indx);
   free_table();
   return 0;
 }

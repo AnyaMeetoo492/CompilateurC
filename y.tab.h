@@ -162,8 +162,12 @@ union YYSTYPE
   int nb; 
   char var; 
   char* str;  // nom de variable
+  struct {
+        int val;
+        int is_constant;
+    } expr;
 
-#line 167 "y.tab.h"
+#line 171 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

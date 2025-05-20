@@ -231,8 +231,12 @@ union YYSTYPE
   int nb; 
   char var; 
   char* str;  // nom de variable
+  struct {
+        int val;
+        int is_constant;
+    } expr;
 
-#line 236 "y.tab.c"
+#line 240 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -708,11 +712,11 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    35,    35,    35,    35,    37,    38,    40,    40,    42,
-      42,    43,    43,    46,    47,    48,    49,    51,    57,    58,
-      62,    63,    67,    68,    69,    70,    71,    75,    78,    93,
-     107,   124,   140,   157,   170,   171,   172,   173,   174,   175,
-     176,   179,   185,   199,   203,   206
+       0,    39,    39,    39,    39,    41,    42,    44,    44,    46,
+      46,    47,    47,    50,    51,    52,    53,    55,    61,    62,
+      66,    67,    71,    72,    73,    74,    75,    79,    82,    97,
+     111,   128,   144,   161,   176,   177,   178,   179,   180,   181,
+     182,   185,   191,   205,   209,   212
 };
 #endif
 
@@ -1332,46 +1336,46 @@ yyreduce:
   switch (yyn)
     {
   case 5: /* FonctionMain: TypeMain tMAIN ArgFormat Body  */
-#line 37 "compil.y"
+#line 41 "compil.y"
                                              {printf("[MAIN]\n");}
-#line 1338 "y.tab.c"
+#line 1342 "y.tab.c"
     break;
 
   case 13: /* TypeVariable: tINT  */
-#line 46 "compil.y"
+#line 50 "compil.y"
              { current_type = 0; }
-#line 1344 "y.tab.c"
+#line 1348 "y.tab.c"
     break;
 
   case 14: /* TypeVariable: tBOOL  */
-#line 47 "compil.y"
+#line 51 "compil.y"
              { current_type = 1; }
-#line 1350 "y.tab.c"
+#line 1354 "y.tab.c"
     break;
 
   case 15: /* TypeVariable: tVOID  */
-#line 48 "compil.y"
+#line 52 "compil.y"
              { current_type = 2; }
-#line 1356 "y.tab.c"
+#line 1360 "y.tab.c"
     break;
 
   case 16: /* TypeVariable: tCHAR  */
-#line 49 "compil.y"
+#line 53 "compil.y"
              { current_type = 3; }
-#line 1362 "y.tab.c"
+#line 1366 "y.tab.c"
     break;
 
   case 17: /* NameVariable: tID  */
-#line 51 "compil.y"
+#line 55 "compil.y"
                    {
         
         (yyval.str) = (yyvsp[0].str);
     }
-#line 1371 "y.tab.c"
+#line 1375 "y.tab.c"
     break;
 
   case 28: /* Affectation: NameVariable tEGAL Expression  */
-#line 78 "compil.y"
+#line 82 "compil.y"
                                             {
     
     int idx = get_index_by_name((yyvsp[-2].str));
@@ -1380,19 +1384,19 @@ yyreduce:
         symbol* sym = get_symbol(idx);
         
         sym->initialised = 1;
-        sym->value = (yyvsp[0].nb);
-        f_write("COP", idx, 0, 0, 0, (yyvsp[0].nb));//PAS SURRRRRRRRRRR
-        printf("[Affectation Expression] %s = %d\n", (yyvsp[-2].str), (yyvsp[0].nb));
+        sym->value = (yyvsp[0].expr);
+        f_write("COP", idx, 0, 0, 0, (yyvsp[0].expr).val);
+        printf("[Affectation Expression] %s = %d\n", (yyvsp[-2].str), (yyvsp[0].expr));
     } else {
         printf("[ERROR] Variable %s pas déclarée\n", (yyvsp[-2].str));
         exit(1);
     }
 }
-#line 1392 "y.tab.c"
+#line 1396 "y.tab.c"
     break;
 
   case 29: /* Affectation: NameVariable tEGAL Value  */
-#line 93 "compil.y"
+#line 97 "compil.y"
                               {
     int idx = get_index_by_name((yyvsp[-2].str));
     if (idx >= 0) {
@@ -1407,11 +1411,11 @@ yyreduce:
         exit(1);
     }
 }
-#line 1411 "y.tab.c"
+#line 1415 "y.tab.c"
     break;
 
   case 30: /* Initialisation: TypeVariable NameVariable  */
-#line 107 "compil.y"
+#line 111 "compil.y"
                                           {
     int idx = get_index_by_name((yyvsp[0].str));
     if (idx >= 0) {
@@ -1429,11 +1433,11 @@ yyreduce:
         add_symbol(sym);
     }
 }
-#line 1433 "y.tab.c"
+#line 1437 "y.tab.c"
     break;
 
   case 31: /* InitAffect: TypeVariable NameVariable tEGAL Expression  */
-#line 124 "compil.y"
+#line 128 "compil.y"
                                                         {
     int idx = get_index_by_name((yyvsp[-2].str));
     if (idx < 0) {
@@ -1442,20 +1446,20 @@ yyreduce:
         sym->type = VARIABLE;
         sym->scope = LOCAL;
         sym->initialised = 1;
-        sym->value = (yyvsp[0].nb);
+        sym->value = (yyvsp[0].expr);
         sym->dtype = current_type;
         add_symbol(sym);
 
         idx=get_index(sym);
-        printf("[InitAfect] %s\n", (yyvsp[-2].str));
-        f_write("AFC", idx, 0, 0, 0, (yyvsp[0].nb));
+        printf("[InitAfect Expression] %s\n", (yyvsp[-2].str));
+        f_write("AFC", idx, 0, 0, 0, (yyvsp[0].expr));
     }
 }
-#line 1455 "y.tab.c"
+#line 1459 "y.tab.c"
     break;
 
   case 32: /* InitAffect: TypeVariable NameVariable tEGAL Value  */
-#line 140 "compil.y"
+#line 144 "compil.y"
                                            {
     int idx = get_index_by_name((yyvsp[-2].str));
     if (idx < 0) {
@@ -1468,55 +1472,57 @@ yyreduce:
         sym->dtype = current_type;
         add_symbol(sym);
         idx=get_index(sym);
-        printf("[InitAfect] %s\n", (yyvsp[-2].str));
+        printf("[InitAfect Value] %s\n", (yyvsp[-2].str));
         f_write("AFC", idx, 0, 0, 1, (yyvsp[0].nb));
     }
 }
-#line 1476 "y.tab.c"
+#line 1480 "y.tab.c"
     break;
 
   case 33: /* Expression: Expression tADD Expression  */
-#line 157 "compil.y"
+#line 161 "compil.y"
                                  {
-        printf("[ADD]\n");
+        printf("[ADD] %d + %d\n", (yyvsp[-2].expr), (yyvsp[0].expr));
         symbol* sym = malloc(sizeof(symbol));
         sym->type = VARIABLE;
         sym->scope = LOCAL;
         sym->initialised = 1;
+        sym->name = strdup("tmp");
         sym->value = -1;
         sym->dtype = current_type;
+        
         add_tmp(sym);
         int idx=get_index(sym);
-        (yyval.nb)=idx;
-        f_write("ADD",idx, 0, (yyvsp[-2].nb), 0, (yyvsp[0].nb));
+        (yyval.expr)=idx;
+        f_write("ADD",idx, 0, (yyvsp[-2].expr), 0, (yyvsp[0].expr));
     }
-#line 1494 "y.tab.c"
-    break;
-
-  case 39: /* Expression: Expression tORLOG Expression  */
-#line 175 "compil.y"
-                                   {}
 #line 1500 "y.tab.c"
     break;
 
+  case 39: /* Expression: Expression tORLOG Expression  */
+#line 181 "compil.y"
+                                   {}
+#line 1506 "y.tab.c"
+    break;
+
   case 40: /* Expression: tPO Expression tPF  */
-#line 176 "compil.y"
+#line 182 "compil.y"
                          {
         
     }
-#line 1508 "y.tab.c"
+#line 1514 "y.tab.c"
     break;
 
   case 41: /* Expression: Value  */
-#line 179 "compil.y"
+#line 185 "compil.y"
             {
         
     }
-#line 1516 "y.tab.c"
+#line 1522 "y.tab.c"
     break;
 
   case 42: /* Value: NameVariable  */
-#line 185 "compil.y"
+#line 191 "compil.y"
                    {
         int idx = get_index_by_name((yyvsp[0].str));
         if (idx >= 0) {
@@ -1531,36 +1537,36 @@ yyreduce:
             exit(1);
         }
     }
-#line 1535 "y.tab.c"
+#line 1541 "y.tab.c"
     break;
 
   case 43: /* Value: tNB  */
-#line 199 "compil.y"
+#line 205 "compil.y"
           {
         
         (yyval.nb) = (yyvsp[0].nb);
     }
-#line 1544 "y.tab.c"
+#line 1550 "y.tab.c"
     break;
 
   case 44: /* Value: tTRUE  */
-#line 203 "compil.y"
+#line 209 "compil.y"
             {
         (yyval.nb) = 1;
     }
-#line 1552 "y.tab.c"
+#line 1558 "y.tab.c"
     break;
 
   case 45: /* Value: tFALSE  */
-#line 206 "compil.y"
+#line 212 "compil.y"
              {
         (yyval.nb) = 0;
     }
-#line 1560 "y.tab.c"
+#line 1566 "y.tab.c"
     break;
 
 
-#line 1564 "y.tab.c"
+#line 1570 "y.tab.c"
 
       default: break;
     }
@@ -1753,7 +1759,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 213 "compil.y"
+#line 219 "compil.y"
 
 
 void yyerror(char *s) 
@@ -1768,15 +1774,10 @@ int main(void) {
 
   FILE *f = fopen("assembly.txt", "w");
   
-  int indx = get_index_by_name("b");
-
-  printf("Index de b : %d\n", indx);
   yyparse();
   
   printf(">> Fin yyparse\n");
   print_table();
-  indx = get_index_by_name("b");
-  printf("Index de b : %d\n", indx);
   free_table();
   return 0;
 }

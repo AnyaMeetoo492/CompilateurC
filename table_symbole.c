@@ -86,6 +86,7 @@ void add_symbol(symbol* sym) {
 // Ajouter un symbole temporaire
 void add_tmp(symbol* sym) {
     if (temp_index >= 0) {
+        printf("[Adding tmp symbol] %s to %d\n", sym->name,temp_index);
         table_symbol[temp_index] = sym;
         temp_index--;
     }

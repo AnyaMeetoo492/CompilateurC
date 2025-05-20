@@ -1,5 +1,7 @@
 AFC 0 3              ; mémoire[0] = 3
 AFC 1 5              ; mémoire[1] = 5
-AFC 2 6              ; mémoire[2] = 6
+AFC 2 1              ; mémoire[2] = 1
 ADD 254 1 2          ; mémoire[254] = mémoire[1] ADD mémoire[2]
 COP 0 254            ; mémoire[0] = mémoire[254]
+ADD 253 1 1          ; mémoire[253] = mémoire[1] ADD mémoire[1]
+COP 0 253            ; mémoire[0] = mémoire[253]
